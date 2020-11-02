@@ -1,0 +1,6 @@
+# common/tasks/main.yml
+
+- name: Install system packages
+  package:
+    name: "{{ host_packages }}"
+    state: present

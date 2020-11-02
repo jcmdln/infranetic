@@ -1,0 +1,6 @@
+# site.yml
+
+- hosts: default
+  become: true
+  roles:
+    - role: common

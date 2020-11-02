@@ -1,0 +1,56 @@
+{
+    "builders": [
+        {
+            "accelerator": "kvm",
+            "boot_command": [
+                "e<down><down><end> ",
+                "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-{{user `vmajor`}}.ks ",
+                "<leftCtrlOn>x<leftCtrlOff>"
+            ],
+            "boot_wait": "5s",
+            "cpus": "2",
+            "disk_compression": true,
+            "disk_interface": "virtio-scsi",
+            "disk_size": "20G",
+            "format": "qcow2",
+            "headless": true,
+            "http_directory": "http",
+            "iso_checksum": "sha256:{{user `checksum`}}",
+            "iso_url": "https://mirrors.kernel.org/fedora/releases/{{user `vmajor`}}/Everything/x86_64/iso/Fedora-Everything-netinst-x86_64-{{user `vmajor`}}-{{user `vminor`}}.iso",
+            "memory": "2048",
+            "net_device": "virtio-net",
+            "output_directory": "build/fedora/{{user `vmajor`}}",
+            "qemuargs": [
+                [
+                    "-bios",
+                    "/usr/share/edk2/ovmf/OVMF_CODE.fd"
+                ]
+            ],
+            "shutdown_command": "echo {{user `userpass`}} | sudo -S poweroff",
+            "ssh_agent_auth": false,
+            "ssh_password": "{{user `userpass`}}",
+            "ssh_timeout": "15m",
+            "ssh_username": "{{user `userpass`}}",
+            "type": "qemu",
+            "vm_name": "fedora-{{user `vmajor`}}-{{user `vminor`}}-amd64-qemu.qcow2"
+        }
+    ],
+    "provisioners": [
+        {
+            "ansible_ssh_extra_args": [
+                "-o PubkeyAcceptedKeyTypes=+ssh-dss"
+            ],
+            "extra_arguments": [
+                "-e ansible_sudo_pass={{user `userpass`}}"
+            ],
+            "playbook_file": "../ansible/site.yml",
+            "type": "ansible"
+        }
+    ],
+    "variables": {
+        "checksum": "7ce4bb4b3e77e2b0c74e5aa3478eef1c26104a7040701f9de3d3a2cb06f6b05d",
+        "userpass": "fedora",
+        "vmajor": "32",
+        "vminor": "1.6"
+    }
+}

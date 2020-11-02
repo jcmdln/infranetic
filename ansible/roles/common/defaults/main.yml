@@ -1,0 +1,35 @@
+# common/defaults/main.yml
+
+host_packages:
+  - bash-completion
+  - bind-utils
+  - bpftrace
+  - bzip2
+  - curl
+  - findutils
+  - git
+  - gzip
+  - htop
+  - iftop
+  - iotop
+  - kernel-tools
+  - lm_sensors
+  - mosh
+  - msr-tools
+  - pciutils
+  - podman
+  - procps-ng
+  - rsync
+  - sed
+  - sysstat
+  - tar
+  - tmux
+  - tree
+  - unzip
+  - usbutils
+  - vim-minimal
+  - wget
+  - which
+  - whois
+  - xz
+  - zip
