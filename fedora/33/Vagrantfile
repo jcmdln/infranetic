@@ -4,14 +4,26 @@
 ENV["VAGRANT_DEFAULT_PROVIDER"] = "libvirt"
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "file://build/fedora-33-amd64-qemu.box"
-  config.vm.hostname = "vagrant-fedora-33"
 
-  config.vm.provider "libvirt" do |v|
-    v.cpus = 2
-    v.disk_bus = "scsi"
-    v.driver = "kvm"
-    v.host = "localhost"
-    v.memory = 2048
+  config.vm.define :vm1 do |vm1|
+    vm1.vm.box = "file://packer_qemu_libvirt.box"
+    vm1.vm.hostname = "vagrant-fedora-33"
+
+    vm1.vm.network :public_network,
+      :dev => "virbr0",
+      :mode => "bridge",
+      :type => "bridge"
+
+    vm1.vm.provider "libvirt" do |v|
+      v.cpus = 2
+      v.disk_bus = "scsi"
+      v.driver = "kvm"
+      v.host = "localhost"
+      v.memory = 2048
+      v.qemu_use_session = true
+      v.system_uri = 'qemu:///system'
+      v.uri = 'qemu:///session'
+    end
   end
+
 end

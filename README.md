@@ -4,6 +4,22 @@ This repository contains a definition of infrastructure that can be trivially
 reproduced on a commodity laptop, deployed to cloud providers or on-premesis
 bare metal servers.
 
+* https://learn.hashicorp.com
+* https://katacoda.com/hashicorp
+
+
+Components
+=========
+* https://github.com/hashicorp/boundary
+* https://github.com/hashicorp/consul
+* https://github.com/hashicorp/horizon
+* https://github.com/hashicorp/nomad
+* https://github.com/hashicorp/packer
+* https://github.com/hashicorp/terraform
+* https://github.com/hashicorp/vagrant
+* https://github.com/hashicorp/vault
+* https://github.com/hashicorp/waypoint
+
 
 Design
 =========
@@ -42,9 +58,10 @@ assume that you are using Fedora
     (.venv) $ ansible-galaxy role install -r ansible/requirements-ansible.yml
     ```
 
-3. Build an image
+3. Build and test an image
 
     ```sh
     $ cd fedora/33/
     $ packer.io build fedora-33.json
+    $ vagrant up
     ```
