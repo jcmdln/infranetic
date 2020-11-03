@@ -1,6 +1,6 @@
-# common/defaults/main.yml
+# common/vars/Fedora.yml
 
-host_packages:
+common_packages:
   - bash-completion
   - bind-utils
   - bpftrace
@@ -33,3 +33,13 @@ host_packages:
   - whois
   - xz
   - zip
+
+common_services_disabled:
+  - dnf-makecache.timer
+  - sysstat.service
+  - sysstat-collect.timer
+  - sysstat-summary.timer
+
+common_services_enabled:
+  - chronyd
+  - sshd

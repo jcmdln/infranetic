@@ -59,7 +59,6 @@ btrfs-progs
 # Services / Addons
 #
 
-services --disabled="dnf-makecache.timer,mlocate-updatedb.timer,sysstat.service,sysstat-collect.timer,sysstat-summary.timer"
 services --enabled="chronyd,sshd"
 
 %addon com_redhat_kdump --disable --reserve-mb="128"
