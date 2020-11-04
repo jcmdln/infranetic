@@ -4,7 +4,7 @@
             "accelerator": "kvm",
             "boot_command": [
                 "e<down><down><end> ",
-                "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-{{user `vmajor`}}.ks ",
+                "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg",
                 "<leftCtrlOn>x<leftCtrlOff>"
             ],
             "boot_wait": "5s",
@@ -16,10 +16,10 @@
             "headless": true,
             "http_directory": "http",
             "iso_checksum": "sha256:{{user `checksum`}}",
-            "iso_url": "https://mirrors.kernel.org/fedora/releases/{{user `vmajor`}}/Everything/x86_64/iso/Fedora-Everything-netinst-x86_64-{{user `vmajor`}}-{{user `vminor`}}.iso",
+            "iso_url": "http://mirrors.kernel.org/fedora/releases/33/Everything/x86_64/iso/Fedora-Everything-netinst-x86_64-33-1.2.iso",
             "memory": "2048",
             "net_device": "virtio-net",
-            "output_directory": "build/fedora/{{user `vmajor`}}",
+            "output_directory": "build/",
             "qemuargs": [
                 [
                     "-bios",
@@ -32,7 +32,14 @@
             "ssh_timeout": "15m",
             "ssh_username": "{{user `userpass`}}",
             "type": "qemu",
-            "vm_name": "fedora-{{user `vmajor`}}-{{user `vminor`}}-amd64-qemu.qcow2"
+            "vm_name": "{{user `name`}}.qcow2"
+        }
+    ],
+    "post-processors": [
+        {
+            "keep_input_artifact": true,
+            "output": "build/{{user `name`}}.box",
+            "type": "vagrant"
         }
     ],
     "provisioners": [
@@ -45,12 +52,21 @@
             ],
             "playbook_file": "../ansible/site.yml",
             "type": "ansible"
+        },
+        {
+            "ansible_ssh_extra_args": [
+                "-o PubkeyAcceptedKeyTypes=+ssh-dss"
+            ],
+            "extra_arguments": [
+                "-e ansible_sudo_pass={{user `userpass`}}"
+            ],
+            "playbook_file": "ansible/site.yml",
+            "type": "ansible"
         }
     ],
     "variables": {
-        "checksum": "7ce4bb4b3e77e2b0c74e5aa3478eef1c26104a7040701f9de3d3a2cb06f6b05d",
-        "userpass": "fedora",
-        "vmajor": "32",
-        "vminor": "1.6"
+        "checksum": "964fb135339759f54300130922b1b46dc153b6ed2f8ea538b316757f8ee707bc",
+        "name": "compute-amd64-qemu",
+        "userpass": "infranetic"
     }
 }

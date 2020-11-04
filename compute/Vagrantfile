@@ -6,7 +6,7 @@ ENV["VAGRANT_DEFAULT_PROVIDER"] = "libvirt"
 Vagrant.configure("2") do |config|
 
   config.vm.define :vm1 do |vm1|
-    vm1.vm.box = "file://fedora-33-amd64-qemu.box"
+    vm1.vm.box = "file://build/compute-amd64-qemu.box"
     vm1.vm.hostname = "vagrant-fedora-33"
 
     vm1.vm.network :public_network,

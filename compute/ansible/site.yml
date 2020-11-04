@@ -1,0 +1,9 @@
+# site.yml
+
+- name: compute
+  hosts: default
+  become: true
+  tasks:
+    - name: Run an arbitrary command
+      raw: >-
+        echo "wewlad"

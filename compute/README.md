@@ -1,2 +1,2 @@
-Fedora 32
+compute
 ==========

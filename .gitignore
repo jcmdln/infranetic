@@ -177,17 +177,3 @@ cython_debug/
 
 # Log files (if you are creating logs in debug mode, uncomment this)
 # *.log
-
-#
-# Errata
-#
-
-# Ignore all items within Ansible collections directory.
-ansible/collections/**
-
-# Allow specific items within Ansible roles directory. Used for roles that
-# are specific to our playbook and not retrieved from Ansible Galaxy.
-ansible/roles/**
-!ansible/roles/common/
-!ansible/roles/common/*/
-!ansible/roles/common/**/*
