@@ -23,36 +23,38 @@ I'm not sure if it will stay this way, but I want to have as few components to
 reason about as possible. The more kinds of "stuff" we have the more difficult
 it will be to wrangle it in the future, should complexity creep in.
 
-#### bootstrap
-* https://github.com/ansible/ansible
-* https://github.com/hashicorp/packer
-* https://github.com/hashicorp/terraform
-* https://github.com/hashicorp/vagrant
-
 #### compute
 * https://github.com/hashicorp/consul
 * https://github.com/hashicorp/nomad
-* https://github.com/hashicorp/vault
+* https://github.com/hashicorp/nomad-driver-podman
+* https://github.com/containers/podman
+
+#### provisioner
+* https://github.com/digitalrebar/provision
+* https://github.com/digitalrebar/provision-plugins
+
+#### storage
+* TBD, though likely to be Ceph
+
+#### misc
+Stuff I want to get around to incorporating.
 
 * https://github.com/hashicorp/boundary
 * https://github.com/hashicorp/horizon
+* https://github.com/hashicorp/vault
 * https://github.com/hashicorp/waypoint
-
-#### provisioner
-* https://github.com/openstack/ironic
-
-#### storage
-* https://github.com/ceph/ceph
-
-#### misc
 * https://github.com/openstack/virtualbmc
 
 
 Quickstart
 ----------
 Despite the mono-repo approach, the initial setup isn't especially brutal. We
-assume that you are using Fedora
+assume that you are using Fedora and have some knowledge of the following:
 
+* https://github.com/ansible/ansible
+* https://github.com/hashicorp/packer
+* https://github.com/hashicorp/terraform
+* https://github.com/hashicorp/vagrant
 
 1. Prepare the host system
 
