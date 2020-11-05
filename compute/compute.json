@@ -4,7 +4,8 @@
             "accelerator": "kvm",
             "boot_command": [
                 "e<down><down><end> ",
-                "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg",
+                "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg ",
+                "modprobe.blacklist=floppy",
                 "<leftCtrlOn>x<leftCtrlOff>"
             ],
             "boot_wait": "5s",

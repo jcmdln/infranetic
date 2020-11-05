@@ -44,6 +44,9 @@ it will be to wrangle it in the future, should complexity creep in.
 #### storage
 * https://github.com/ceph/ceph
 
+#### misc
+* https://github.com/openstack/virtualbmc
+
 
 Quickstart
 ----------
@@ -51,14 +54,29 @@ Despite the mono-repo approach, the initial setup isn't especially brutal. We
 assume that you are using Fedora
 
 
-1. Install system dependencies
+1. Prepare the host system
 
     ```sh
-    $ sudo dnf install -y dnf-plugins-core
+    $ sudo dnf install -y dnf-plugins-core gcc libguestfs-tools-c libvirt \
+        libvirt-devel libxml2-devel libxslt-devel make ruby-devel
     $ sudo dnf config-manager \
         --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
-    $ sudo dnf -y install packer terraform vagrant vault
+    $ sudo dnf install -y packer terraform vagrant vault
     $ sudo ln -sf /usr/bin/packer{,.io}
+    ```
+
+    ```sh
+    $ sudo firewall-cmd --permanent --zone=libvirt --add-service=nfs
+    $ sudo firewall-cmd --permanent --zone=libvirt --add-service=rpc-bind
+    $ sudo firewall-cmd --permanent --zone=libvirt --add-service=mountd
+    $ sudo firewall-cmd --reload
+    $ sudo systemctl restart nfs-server rpcbind.service
+    $ sudo systemctl enable --now libvirtd
+    ```
+
+    ```sh
+    $ sudo gpasswd -a ${USER} libvirt
+    $ newgrp libvirt
     ```
 
 2. Install Python dependencies
@@ -77,6 +95,11 @@ assume that you are using Fedora
     ```
 
 4. Build and test an image
+
+    ```sh
+    (.venv) $ export CONFIGURE_ARGS="with-libvirt-include=/usr/include/libvirt with-libvirt-lib=/usr/lib64"
+    (.venv) $ vagrant plugin install vagrant-libvirt
+    ```
 
     ```sh
     (.venv) $ cd compute/

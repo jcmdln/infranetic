@@ -1,8 +1,1 @@
 # requirements-ansible.yml
-
-collections:
-  - community.grafana
-
-roles:
-  - name: grafana
-    src: cloudalchemy.grafana
