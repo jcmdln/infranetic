@@ -49,6 +49,7 @@
                 "-o PubkeyAcceptedKeyTypes=+ssh-dss"
             ],
             "extra_arguments": [
+                "-e ansible_python_interpreter=auto_silent",
                 "-e ansible_sudo_pass={{user `userpass`}}"
             ],
             "playbook_file": "../ansible/site.yml",
@@ -59,6 +60,7 @@
                 "-o PubkeyAcceptedKeyTypes=+ssh-dss"
             ],
             "extra_arguments": [
+                "-e ansible_python_interpreter=auto_silent",
                 "-e ansible_sudo_pass={{user `userpass`}}"
             ],
             "playbook_file": "ansible/site.yml",
