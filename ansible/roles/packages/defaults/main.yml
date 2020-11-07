@@ -1,9 +1,10 @@
-# common/vars/Fedora.yml
+# packages/defaults/main.yml
 
-common_packages:
+packages:
   - bash-completion
   - bind-utils
   - bpftrace
+  - btrfs-progs
   - bzip2
   - curl
   - findutils
@@ -33,13 +34,5 @@ common_packages:
   - whois
   - xz
   - zip
-
-common_services_disabled:
-  - dnf-makecache.timer
-  - sysstat.service
-  - sysstat-collect.timer
-  - sysstat-summary.timer
-
-common_services_enabled:
-  - chronyd
-  - sshd
+  - zram-generator
+  - zram-generator-defaults

@@ -59,13 +59,13 @@ assume that you are using Fedora and have some knowledge of the following:
 1. Prepare the host system
 
     ```sh
-    $ sudo dnf install -y dnf-plugins-core gcc libguestfs-tools-c libvirt \
-        libvirt-devel libxml2-devel libxslt-devel make ruby-devel
-    $ sudo dnf config-manager \
-        --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
-    $ sudo dnf install -y packer terraform vagrant vault
-    $ sudo ln -sf /usr/bin/packer{,.io}
+    $ sudo dnf install -y dnf-plugins-core gcc krb5-devel libguestfs-tools-c \
+        libvirt libvirt-devel libxml2-devel libxslt-devel make ruby-devel \
+        vagrant vagrant-libvirt
     ```
+
+    firewalld should work out of the box, though you may need to make
+    adjustments
 
     ```sh
     $ sudo firewall-cmd --permanent --zone=libvirt --add-service=nfs
@@ -91,17 +91,16 @@ assume that you are using Fedora and have some knowledge of the following:
 
 3. Install Ansible dependencies
 
+    Currently there are no additional dependencies as the playbooks are very
+    immature, but in the future this step will be required for each component
+    you wish to build.
+
     ```sh
     (.venv) $ ansible-galaxy install -r ansible/requirements-ansible.yml
     (.venv) $ ansible-galaxy install -r compute/requirements-ansible.yml
     ```
 
 4. Build and test an image
-
-    ```sh
-    (.venv) $ export CONFIGURE_ARGS="with-libvirt-include=/usr/include/libvirt with-libvirt-lib=/usr/lib64"
-    (.venv) $ vagrant plugin install vagrant-libvirt
-    ```
 
     ```sh
     (.venv) $ cd compute/

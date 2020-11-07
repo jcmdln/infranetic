@@ -5,7 +5,4 @@
 
 # Allow specific items within Ansible roles directory. Used for roles that
 # are specific to our playbook and not retrieved from Ansible Galaxy.
-**/roles/**
-!**/roles/common/
-!**/roles/common/*/
-!**/roles/common/**/*
+#**/roles/**

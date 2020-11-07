@@ -1,0 +1,6 @@
+# packages/tasks/main.yml
+
+- name: Install packages
+  package:
+    name: "{{ packages }}"
+    state: present

@@ -4,4 +4,5 @@
   hosts: default
   become: true
   roles:
-    - role: common
+    - packages
+    - services

@@ -1,0 +1,15 @@
+# packages/tasks/main.yml
+
+- name: Disable unwanted system services
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  with_items: "{{ services_disable }}"
+
+- name: Start and enable services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  with_items: "{{ services_enable }}"

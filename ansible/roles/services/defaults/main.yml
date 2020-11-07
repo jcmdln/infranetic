@@ -1,0 +1,11 @@
+# packages/defaults/main.yml
+
+services_disable:
+  - dnf-makecache.timer
+  - sysstat.service
+  - sysstat-collect.timer
+  - sysstat-summary.timer
+
+services_enable:
+  - chronyd
+  - sshd
