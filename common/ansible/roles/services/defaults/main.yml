@@ -3,7 +3,9 @@
 services_disable:
   - dnf-makecache.timer
   - sysstat.service
+  - sysstat-collect.service
   - sysstat-collect.timer
+  - sysstat-summary.service
   - sysstat-summary.timer
 
 services_enable:

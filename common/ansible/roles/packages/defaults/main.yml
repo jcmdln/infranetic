@@ -4,8 +4,8 @@ packages:
   - bash-completion
   - bind-utils
   - bpftrace
-  - btrfs-progs
   - bzip2
+  - casync
   - curl
   - findutils
   - git
@@ -34,5 +34,3 @@ packages:
   - whois
   - xz
   - zip
-  - zram-generator
-  - zram-generator-defaults

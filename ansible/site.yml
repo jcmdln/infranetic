@@ -1,8 +1,0 @@
-# site.yml
-
-- name: common
-  hosts: default
-  become: true
-  roles:
-    - packages
-    - services

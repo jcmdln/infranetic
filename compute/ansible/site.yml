@@ -4,6 +4,6 @@
   hosts: default
   become: true
   tasks:
-    - name: Run an arbitrary command
+    - name: echo "wewlad"
       raw: >-
         echo "wewlad"

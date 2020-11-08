@@ -1,0 +1,4 @@
+# requirements-ansible.yml
+
+collections:
+  - ansible.posix

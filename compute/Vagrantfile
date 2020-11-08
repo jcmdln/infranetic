@@ -1,21 +1,35 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
+# Vagrantfile
 
+# Use the libvirt provider by default without having to specify it at the
+# command line.
 ENV["VAGRANT_DEFAULT_PROVIDER"] = "libvirt"
 
 Vagrant.configure("2") do |config|
+  # Use a non-standard user account
+  config.ssh.password = "infranetic"
+  config.ssh.username = "infranetic"
+
+  # No need to verify the host key
   config.ssh.verify_host_key = false
 
+  # Settings for libvirt provider
+  config.vm.provider "libvirt" do |v|
+    # Load OVMF UEFI image
+    v.loader = "/usr/share/edk2/ovmf/OVMF_CODE.fd"
+
+    v.cpus = 2
+    v.memory = 2048
+  end
+
   config.vm.define :compute_1 do |c|
-    c.ssh.password = "infranetic"
-    c.ssh.username = "infranetic"
-    c.vm.box = "file://build/compute-amd64-qemu.box"
-    c.vm.hostname = "compute-1"
-    c.vm.provider "libvirt" do |v|
-      v.cpus = 2
-      v.loader = "/usr/share/edk2/ovmf/OVMF_CODE.fd"
-      v.memory = 2048
-    end
+    c.vm.box = "file://build/compute-amd64-qemu-uefi.box"
+
+    # TODO: Setting hostname is broken
+    #c.vm.hostname = "infranetic"
+
+    # Disable NFS
+    config.nfs.verify_installed = false
+    config.vm.synced_folder '.', '/vagrant', disabled: true
   end
 
 end

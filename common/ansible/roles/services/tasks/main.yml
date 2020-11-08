@@ -5,6 +5,7 @@
     name: "{{ item }}"
     state: stopped
     enabled: false
+  failed_when: false
   with_items: "{{ services_disable }}"
 
 - name: Start and enable services

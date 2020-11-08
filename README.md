@@ -1,7 +1,7 @@
 **Reproducable infrastructure that can be deployed locally or globally.**
 
 This repository contains a definition of infrastructure that can be trivially
-reproduced on a commodity laptop, deployed to cloud providers or on-premesis
+reproduced on commodity hardware, deployed to cloud providers or on-premesis
 bare metal servers.
 
 * https://learn.hashicorp.com
@@ -10,40 +10,44 @@ bare metal servers.
 
 Design
 ----------
-This section is going to reiterate common idioms that take inspiration from
-Netflix, Facebook, and other such exemplars.
-
 We use the latest Fedora release for all appliances to take advantage of BTRFS
 and BPF improvements gained from a near-mainline kernel. Rather than creating
 long-term strategies for handling software updates, our our goal is to deploy
-relatively short-lived instances.
+relatively short-lived instances that share a common base and always make
+services we deploy highly available.
 
 ### Components
-I'm not sure if it will stay this way, but I want to have as few components to
-reason about as possible. The more kinds of "stuff" we have the more difficult
-it will be to wrangle it in the future, should complexity creep in.
+To keep things simple, there are a handful of images that we refer to as
+components that are definitions of a piece of the greater deployment.
+
+#### common
+This directory contains shared assets which are used by all other components
+which includes Ansible tasks, kickstarts, and other such things.
 
 #### compute
+I want to test "HashiStack" and Kubernetes, starting with the former. Nomad
+seems pretty simple (as in concise) and I've always wanted to dig into it. At
+some point I'll have two compute components to evaluate each environment for
+things like general simplicity and resource usage.
+
 * https://github.com/hashicorp/consul
 * https://github.com/hashicorp/nomad
 * https://github.com/hashicorp/nomad-driver-podman
 * https://github.com/containers/podman
+
+Stuff I want to get around to incorporating:
+* https://github.com/hashicorp/boundary
+* https://github.com/hashicorp/horizon
+* https://github.com/hashicorp/vault
+* https://github.com/hashicorp/waypoint
+* https://github.com/openstack/virtualbmc
 
 #### provisioner
 * https://github.com/digitalrebar/provision
 * https://github.com/digitalrebar/provision-plugins
 
 #### storage
-* TBD, though likely to be Ceph
-
-#### misc
-Stuff I want to get around to incorporating.
-
-* https://github.com/hashicorp/boundary
-* https://github.com/hashicorp/horizon
-* https://github.com/hashicorp/vault
-* https://github.com/hashicorp/waypoint
-* https://github.com/openstack/virtualbmc
+* https://github.com/minio/minio
 
 
 Quickstart
@@ -58,6 +62,8 @@ assume that you are using Fedora and have some knowledge of the following:
 
 1. Prepare the host system
 
+	Install the base system package dependencies:
+
     ```sh
     $ sudo dnf install -y dnf-plugins-core gcc krb5-devel libguestfs-tools-c \
         libvirt libvirt-devel libxml2-devel libxslt-devel make ruby-devel \
@@ -65,7 +71,7 @@ assume that you are using Fedora and have some knowledge of the following:
     ```
 
     firewalld should work out of the box, though you may need to make
-    adjustments
+    adjustments:
 
     ```sh
     $ sudo firewall-cmd --permanent --zone=libvirt --add-service=nfs
@@ -75,6 +81,9 @@ assume that you are using Fedora and have some knowledge of the following:
     $ sudo systemctl restart nfs-server rpcbind.service
     $ sudo systemctl enable --now libvirtd
     ```
+
+	Optionally add your user to the 'libvirt' group so you won't have to build
+	as root:
 
     ```sh
     $ sudo gpasswd -a ${USER} libvirt
@@ -91,19 +100,14 @@ assume that you are using Fedora and have some knowledge of the following:
 
 3. Install Ansible dependencies
 
-    Currently there are no additional dependencies as the playbooks are very
-    immature, but in the future this step will be required for each component
-    you wish to build.
-
     ```sh
-    (.venv) $ ansible-galaxy install -r ansible/requirements-ansible.yml
-    (.venv) $ ansible-galaxy install -r compute/requirements-ansible.yml
+    (.venv) $ ansible-galaxy install -r requirements-ansible.yml
     ```
 
 4. Build and test an image
 
     ```sh
     (.venv) $ cd compute/
-    (.venv) $ packer.io build compute.json
+    (.venv) $ packer build compute.pkr.hcl
     (.venv) $ vagrant up
     ```
