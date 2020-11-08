@@ -1,4 +1,4 @@
-**Reproducable infrastructure that can be deployed locally or globally.**
+**Reproducible infrastructure that can be deployed locally or globally.**
 
 This repository contains a definition of infrastructure that can be trivially
 reproduced on commodity hardware, deployed to cloud providers or on-premesis
