@@ -3,6 +3,7 @@
 - name: compute
   hosts: default
   become: true
+
   tasks:
     - name: echo "wewlad"
       raw: >-

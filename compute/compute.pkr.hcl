@@ -1,4 +1,4 @@
-# compute-uefi.pkr.hcl
+# compute.pkr.hcl
 
 variable "name" {
     type    = string
@@ -53,7 +53,7 @@ source "qemu" "compute_1" {
     disk_size        = "20G"
     format           = "qcow2"
     headless         = true
-    http_directory   = "../common/http/"
+    http_directory   = "../common/http"
     iso_checksum     = "sha256:${var.os_checksum}"
     iso_url          = "${var.os_mirror}/releases/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-netinst-${var.os_arch}-${var.os_version}-${var.os_version_minor}.iso"
     memory           = "2048"
@@ -73,21 +73,21 @@ build {
 
     provisioner "ansible" {
 	ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
-	extra_arguments = [
+	extra_arguments        = [
 	    "-e ansible_python_interpreter=auto_silent",
 	    "-e ansible_sudo_pass=${var.userpass}",
 	    "-e vagrant_target=True"
 	]
-	playbook_file = "../common/ansible/site.yml"
+	playbook_file          = "../common/ansible/site.yml"
     }
 
     provisioner "ansible" {
 	ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
-	extra_arguments = [
+	extra_arguments        = [
 	    "-e ansible_python_interpreter=auto_silent",
 	    "-e ansible_sudo_pass=${var.userpass}"
 	]
-	playbook_file = "./ansible/site.yml"
+	playbook_file          = "ansible/site.yml"
     }
 
     post-processor "vagrant" {

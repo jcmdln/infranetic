@@ -70,23 +70,10 @@ assume that you are using Fedora and have some knowledge of the following:
         vagrant vagrant-libvirt
     ```
 
-    firewalld should work out of the box, though you may need to make
-    adjustments:
+	Add your user to the 'libvirt' group so you won't have to build as root:
 
     ```sh
-    $ sudo firewall-cmd --permanent --zone=libvirt --add-service=nfs
-    $ sudo firewall-cmd --permanent --zone=libvirt --add-service=rpc-bind
-    $ sudo firewall-cmd --permanent --zone=libvirt --add-service=mountd
-    $ sudo firewall-cmd --reload
-    $ sudo systemctl restart nfs-server rpcbind.service
-    $ sudo systemctl enable --now libvirtd
-    ```
-
-	Optionally add your user to the 'libvirt' group so you won't have to build
-	as root:
-
-    ```sh
-    $ sudo gpasswd -a ${USER} libvirt
+    $ sudo gpasswd -a $USER libvirt
     $ newgrp libvirt
     ```
 
@@ -104,10 +91,40 @@ assume that you are using Fedora and have some knowledge of the following:
     (.venv) $ ansible-galaxy install -r requirements-ansible.yml
     ```
 
-4. Build and test an image
+4. Build an image
 
     ```sh
     (.venv) $ cd compute/
     (.venv) $ packer build compute.pkr.hcl
-    (.venv) $ vagrant up
     ```
+
+	If you are rebuilding an image, perform the following to remove any
+	intermediary cached images, otherwise the vagrant box will be started with
+	the old image and any changes you expect to be there won't be reflected:
+
+	```sh
+	# Destroy the existing image
+	(.venv) $ vagrant destroy -f
+
+	# Remove all user-local libvirt directories
+	(.venv) $ rm -rf ~/.{cache,config,local/share}/libvirt
+
+	# Force a rebuild of the base image
+    (.venv) $ packer build -force compute.pkr.hcl
+
+	# Force adding the image to Vagrant
+	(.venv) $ vagrant box add --force --name infranetic/compute ./build/compute-amd64-qemu-uefi.box
+	```
+
+5. Test an image
+
+	```sh
+	# Add the image to Vagrant
+	$ vagrant box add --name infranetic/compute ./build/compute-amd64-qemu-uefi.box
+
+	# Bring the vagrant box up
+	$ vagrant up
+
+	# SSH into the running box
+	$ vagrant ssh
+	```
