@@ -19,6 +19,8 @@ packages:
   - msr-tools
   - pciutils
   - podman
+  - podman-compose
+  - podman-plugins
   - procps-ng
   - rsync
   - sed
