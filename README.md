@@ -24,15 +24,15 @@ Usage
 
 1. Prepare the host system
 
-	Install the base system package dependencies:
+    Install the base system package dependencies:
 
     ```sh
     $ sudo dnf install -y dnf-plugins-core gcc krb5-devel libguestfs-tools-c \
-        libvirt libvirt-devel libxml2-devel libxslt-devel make ruby-devel \
-        vagrant vagrant-libvirt
+        libvirt libvirt-client libvirt-devel libxml2-devel libxslt-devel make \
+        ruby-devel vagrant vagrant-libvirt
     ```
 
-	Add your user to the 'libvirt' group so you won't have to build as root:
+    Add your user to the 'libvirt' group so you won't have to build as root:
 
     ```sh
     $ sudo gpasswd -a $USER libvirt
@@ -60,33 +60,34 @@ Usage
     (.venv) $ packer build compute.pkr.hcl
     ```
 
-	If you are rebuilding an image, perform the following to remove any
-	intermediary cached images, otherwise the vagrant box will be started with
-	the old image and any changes you expect to be there won't be reflected:
+    If you are rebuilding an image, perform the following to remove any
+    intermediary cached images, otherwise the vagrant box will be started with
+    the old image and any changes you expect to be there won't be reflected:
 
-	```sh
-	# Destroy the existing instance
-	(.venv) $ vagrant destroy -f
+    ```sh
+    # Destroy the existing instance
+    (.venv) $ vagrant destroy
 
-	# Remove the box
-	(.venv) $ vagrant box remove infranetic/compute
+    # Remove the box
+    (.venv) $ vagrant box remove infranetic/compute
 
-	# Remove all user-local libvirt directories
-	(.venv) $ rm -rf ~/.{cache,config,local/share}/libvirt
+    # Remove all infranetic images (if not just one specific image)
+    (.venv) $ virsh vol-list --pool default | grep infranetic |
+        awk '{print $1}' | xargs virsh vol-delete --pool default --vol
 
-	# Force a rebuild of the base image
+    # Force a rebuild of the base image
     (.venv) $ packer build -force compute.pkr.hcl
-	```
+    ```
 
 5. Test an image
 
-	```sh
-	# Add the image to Vagrant
-	$ vagrant box add --name infranetic/compute ./build/compute-amd64-qemu-uefi.box
+    ```sh
+    # Add the image to Vagrant
+    $ vagrant box add --name infranetic/compute ./build/compute-amd64-qemu-uefi.box
 
-	# Bring the vagrant box up
-	$ vagrant up
+    # Bring the vagrant box up
+    $ vagrant up
 
-	# SSH into the running box
-	$ vagrant ssh
-	```
+    # SSH into the running box
+    $ vagrant ssh
+    ```
