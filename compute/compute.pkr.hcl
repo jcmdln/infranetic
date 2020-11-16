@@ -35,14 +35,12 @@ variable "userpass" {
     default = "infranetic"
 }
 
-# "timestamp" template function replacement
-locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
-
-source "qemu" "compute_1" {
+source "qemu" "compute" {
     accelerator      = "kvm"
     boot_command     = [
 	"e<down><down><end> ",
 	"inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg ",
+	"inst.text ",
 	"modprobe.blacklist=floppy",
 	"<leftCtrlOn>x<leftCtrlOff>"
     ]
@@ -69,7 +67,7 @@ source "qemu" "compute_1" {
 }
 
 build {
-    sources = ["source.qemu.compute_1"]
+    sources = ["source.qemu.compute"]
 
     provisioner "ansible" {
 	ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
