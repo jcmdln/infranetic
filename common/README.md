@@ -1,5 +1,5 @@
 common
 ==========
 
-This subdirectory contains all shared assets such as kickstarts, Ansible
-playbooks, etc.
+This directory contains shared assets which are used by all other components
+which includes Ansible tasks, kickstarts, and other such things.

@@ -4,61 +4,23 @@ This repository contains a definition of infrastructure that can be trivially
 reproduced on commodity hardware, deployed to cloud providers or on-premesis
 bare metal servers.
 
-* https://learn.hashicorp.com
-* https://katacoda.com/hashicorp
-
-
-Design
-----------
 We use the latest Fedora release for all appliances to take advantage of BTRFS
-and BPF improvements gained from a near-mainline kernel. Rather than creating
-long-term strategies for handling software updates, our our goal is to deploy
-relatively short-lived instances that share a common base and always make
-services we deploy highly available.
+and BPF improvements gained from a near-mainline kernel. Our goal is to deploy
+relatively short-lived instances that share a common base and require that all
+services we deploy are highly available.
 
-### Components
-To keep things simple, there are a handful of images that we refer to as
-components that are definitions of a piece of the greater deployment.
-
-#### common
-This directory contains shared assets which are used by all other components
-which includes Ansible tasks, kickstarts, and other such things.
-
-#### compute
-I want to test "HashiStack" and Kubernetes, starting with the former. Nomad
-seems pretty simple (as in concise) and I've always wanted to dig into it. At
-some point I'll have two compute components to evaluate each environment for
-things like general simplicity and resource usage.
-
-* https://github.com/hashicorp/consul
-* https://github.com/hashicorp/nomad
-* https://github.com/hashicorp/nomad-driver-podman
-* https://github.com/containers/podman
-
-Stuff I want to get around to incorporating:
-* https://github.com/hashicorp/boundary
-* https://github.com/hashicorp/horizon
-* https://github.com/hashicorp/vault
-* https://github.com/hashicorp/waypoint
-* https://github.com/openstack/virtualbmc
-
-#### provisioner
-* https://github.com/digitalrebar/provision
-* https://github.com/digitalrebar/provision-plugins
-
-#### storage
-* https://github.com/minio/minio
-
-
-Quickstart
-----------
-Despite the mono-repo approach, the initial setup isn't especially brutal. We
-assume that you are using Fedora and have some knowledge of the following:
+We assume that you are using Fedora and have some knowledge of the following
+utilities, though it should be possible to replicate the setup on any Linux
+distribution.
 
 * https://github.com/ansible/ansible
 * https://github.com/hashicorp/packer
 * https://github.com/hashicorp/terraform
 * https://github.com/hashicorp/vagrant
+
+
+Usage
+----------
 
 1. Prepare the host system
 
@@ -103,17 +65,17 @@ assume that you are using Fedora and have some knowledge of the following:
 	the old image and any changes you expect to be there won't be reflected:
 
 	```sh
-	# Destroy the existing image
+	# Destroy the existing instance
 	(.venv) $ vagrant destroy -f
+
+	# Remove the box
+	(.venv) $ vagrant box remove infranetic/compute
 
 	# Remove all user-local libvirt directories
 	(.venv) $ rm -rf ~/.{cache,config,local/share}/libvirt
 
 	# Force a rebuild of the base image
     (.venv) $ packer build -force compute.pkr.hcl
-
-	# Force adding the image to Vagrant
-	(.venv) $ vagrant box add --force --name infranetic/compute ./build/compute-amd64-qemu-uefi.box
 	```
 
 5. Test an image
