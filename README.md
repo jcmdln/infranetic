@@ -71,7 +71,7 @@ Usage
     # Remove the box
     (.venv) $ vagrant box remove infranetic/compute
 
-    # Remove all infranetic images (if not just one specific image)
+    # Example of removing all infranetic images
     (.venv) $ virsh vol-list --pool default | grep infranetic |
         awk '{print $1}' | xargs virsh vol-delete --pool default --vol
 
