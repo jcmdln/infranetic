@@ -1,16 +1,16 @@
 # packages/tasks/main.yml
 
 - name: Disable unwanted system services
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     state: stopped
     enabled: false
   failed_when: false
-  with_items: "{{ services_disable }}"
+  loop: "{{ services_disable }}"
 
 - name: Start and enable services
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     state: started
     enabled: true
-  with_items: "{{ services_enable }}"
+  loop: "{{ services_enable }}"
