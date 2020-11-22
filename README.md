@@ -92,7 +92,7 @@ Usage
     ```sh
     # Add the image to Vagrant
     $ vagrant box add --name infranetic/compute \
-		./build/compute-amd64-qemu-uefi.box
+        ./build/compute-amd64-qemu-uefi.box
 
     # Bring the vagrant box up
     $ vagrant up
