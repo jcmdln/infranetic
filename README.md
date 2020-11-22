@@ -24,12 +24,20 @@ Usage
 
 1. Prepare the host system
 
-    Install the base system package dependencies:
+    Add HashiCorp repo:
+
+    ```sh
+    $ sudo dnf config-manager \
+        --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo \
+        --exclude vagrant*
+    ```
+
+    Install build dependencies:
 
     ```sh
     $ sudo dnf install -y dnf-plugins-core gcc krb5-devel libguestfs-tools-c \
         libvirt libvirt-client libvirt-devel libxml2-devel libxslt-devel make \
-        ruby-devel vagrant vagrant-libvirt
+        packer ruby-devel vagrant vagrant-libvirt
     ```
 
     Add your user to the 'libvirt' group so you won't have to build as root:
@@ -57,7 +65,7 @@ Usage
 
     ```sh
     (.venv) $ cd compute/
-    (.venv) $ packer build compute.pkr.hcl
+    (.venv) $ packer.io build compute.pkr.hcl
     ```
 
     If you are rebuilding an image, perform the following to remove any
@@ -76,14 +84,15 @@ Usage
         awk '{print $1}' | xargs virsh vol-delete --pool default --vol
 
     # Force a rebuild of the base image
-    (.venv) $ packer build -force compute.pkr.hcl
+    (.venv) $ packer.io build -force compute.pkr.hcl
     ```
 
 5. Test an image
 
     ```sh
     # Add the image to Vagrant
-    $ vagrant box add --name infranetic/compute ./build/compute-amd64-qemu-uefi.box
+    $ vagrant box add --name infranetic/compute \
+		./build/compute-amd64-qemu-uefi.box
 
     # Bring the vagrant box up
     $ vagrant up

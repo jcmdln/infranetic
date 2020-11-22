@@ -1,0 +1,6 @@
+# nomad/tasks/main.yml
+
+- name: Install Nomad
+  ansible.builtin.package:
+    name: "nomad"
+    state: present

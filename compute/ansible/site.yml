@@ -4,7 +4,17 @@
   hosts: default
   become: true
 
-  tasks:
-    - name: echo "wewlad"
-      raw: >-
-        echo "wewlad"
+  pre_tasks:
+    - name: Add HashiCorp repository
+      ansible.builtin.yum_repository:
+        name: "hashicorp"
+        baseurl: "https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable"
+        description: "hashicorp"
+        enabled: true
+        exclude: "vagrant*"
+        file: hashicorp
+        gpgcheck: true
+        gpgkey: "https://rpm.releases.hashicorp.com/gpg"
+
+  roles:
+    - role: nomad
