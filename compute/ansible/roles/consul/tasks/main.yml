@@ -1,6 +1,6 @@
-# nomad/tasks/main.yml
+# consul/tasks/main.yml
 
 - name: Add packages
   ansible.builtin.package:
-    name: "{{ nomad_packages }}"
+    name: "{{ consul_packages }}"
     state: present

@@ -17,4 +17,5 @@
         gpgkey: "https://rpm.releases.hashicorp.com/gpg"
 
   roles:
+    - role: consul
     - role: nomad
