@@ -11,7 +11,7 @@ services we deploy are highly available.
 
 We assume that you are using Fedora and have some knowledge of the following
 utilities, though it should be possible to replicate the setup on any Linux
-distribution.
+distribution:
 
 * https://github.com/ansible/ansible
 * https://github.com/hashicorp/packer
@@ -32,7 +32,7 @@ Usage
         --exclude vagrant*
     ```
 
-    Install build dependencies:
+    Add system dependencies:
 
     ```sh
     $ sudo dnf install -y dnf-plugins-core gcc krb5-devel libguestfs-tools-c \
@@ -40,54 +40,62 @@ Usage
         packer ruby-devel vagrant vagrant-libvirt
     ```
 
-    Add your user to the 'libvirt' group so you won't have to build as root:
+    (Optional) Add user to 'libvirt' group:
 
     ```sh
     $ sudo gpasswd -a $USER libvirt
     $ newgrp libvirt
     ```
 
-2. Install Python dependencies
+2. Add build dependencies
+
+    Setup virtualenv:
 
     ```sh
     $ virtualenv .venv
     $ source .venv/bin/activate
+    ```
+
+    Install Python dependencies:
+    ```sh
     (.venv) $ pip install -r requirements-python.yml
     ```
 
-3. Install Ansible dependencies
+    Install Ansible dependencies:
 
     ```sh
     (.venv) $ ansible-galaxy install -r requirements-ansible.yml
     ```
 
-4. Build an image
+3. Build an image
+
+    Perform your first build:
 
     ```sh
-    (.venv) $ cd compute/
-    (.venv) $ packer.io build compute.pkr.hcl
+    $ cd compute/
+    $ packer.io build compute.pkr.hcl
     ```
 
-    If you are rebuilding an image, perform the following to remove any
+    If you are rebuilding an image, perform the following steps to remove any
     intermediary cached images, otherwise the vagrant box will be started with
     the old image and any changes you expect to be there won't be reflected:
 
     ```sh
     # Destroy the existing instance
-    (.venv) $ vagrant destroy
+    $ vagrant destroy
 
-    # Remove the box
-    (.venv) $ vagrant box remove infranetic/compute
+    # Remove the box from Vagrant
+    $ vagrant box remove infranetic/compute
 
-    # Example of removing all infranetic images
-    (.venv) $ virsh vol-list --pool default | grep infranetic |
-        awk '{print $1}' | xargs virsh vol-delete --pool default --vol
+    # Remove the image from libvirt
+    $ virsh vol-list --pool default | awk '{print $1}' | grep infranetic |
+        grep compute | xargs virsh vol-delete --pool default --vol
 
     # Force a rebuild of the base image
-    (.venv) $ packer.io build -force compute.pkr.hcl
+    $ packer.io build -force compute.pkr.hcl
     ```
 
-5. Test an image
+4. Test an image
 
     ```sh
     # Add the image to Vagrant
