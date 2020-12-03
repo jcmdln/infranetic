@@ -2,7 +2,6 @@
 
 ENV["VAGRANT_DEFAULT_PROVIDER"] = "libvirt"
 
-
 Vagrant.configure("2") do |config|
 
   config.vm.define :compute do |c|
@@ -12,7 +11,7 @@ Vagrant.configure("2") do |config|
     c.ssh.username = "infranetic"
     c.ssh.verify_host_key = false
 
-    c.vm.box = "infranetic/compute"
+    c.vm.box = "infranetic/core"
     c.vm.synced_folder '.', '/vagrant', disabled: true
 
     c.vm.provider "libvirt" do |v|

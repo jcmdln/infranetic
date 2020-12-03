@@ -1,8 +1,8 @@
-# compute.pkr.hcl
+# core.pkr.hcl
 
 variable "name" {
     type    = string
-    default = "compute-amd64-qemu-uefi"
+    default = "infranetic-core-amd64"
 }
 
 variable "os_arch" {
@@ -35,7 +35,7 @@ variable "userpass" {
     default = "infranetic"
 }
 
-source "qemu" "compute" {
+source "qemu" "core" {
     accelerator      = "kvm"
     boot_command     = [
 	"e<down><down><end> ",
@@ -51,7 +51,7 @@ source "qemu" "compute" {
     disk_size        = "20G"
     format           = "qcow2"
     headless         = true
-    http_directory   = "../common/http"
+    http_directory   = "./http"
     iso_checksum     = "sha256:${var.os_checksum}"
     iso_url          = "${var.os_mirror}/releases/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-netinst-${var.os_arch}-${var.os_version}-${var.os_version_minor}.iso"
     memory           = "2048"
@@ -67,7 +67,7 @@ source "qemu" "compute" {
 }
 
 build {
-    sources = ["source.qemu.compute"]
+    sources = ["source.qemu.core"]
 
     provisioner "ansible" {
 	ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
@@ -76,7 +76,7 @@ build {
 	    "-e ansible_sudo_pass=${var.userpass}",
 	    "-e vagrant_target=True"
 	]
-	playbook_file          = "../common/ansible/site.yml"
+	playbook_file          = "./ansible/common-ansible/site.yml"
     }
 
     provisioner "ansible" {
@@ -85,7 +85,7 @@ build {
 	    "-e ansible_python_interpreter=auto_silent",
 	    "-e ansible_sudo_pass=${var.userpass}"
 	]
-	playbook_file          = "ansible/site.yml"
+	playbook_file          = "./ansible/hashisuite-ansible/site.yml"
     }
 
     post-processor "vagrant" {
