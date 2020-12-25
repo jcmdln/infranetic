@@ -70,7 +70,7 @@ Usage
 
     ```sh
     $ cd compute/
-    $ packer.io build compute.pkr.hcl
+    $ packer.io build core.pkr.hcl
     ```
 
     If you are rebuilding an image, perform the following steps to remove any
@@ -82,14 +82,14 @@ Usage
     $ vagrant destroy
 
     # Remove the box from Vagrant
-    $ vagrant box remove infranetic/compute
+    $ vagrant box remove infranetic/core
 
     # Remove the image from libvirt
     $ virsh vol-list --pool default | awk '{print $1}' | grep infranetic |
-        grep compute | xargs virsh vol-delete --pool default --vol
+        grep core | xargs virsh vol-delete --pool default --vol
 
     # Force a rebuild of the base image
-    $ packer.io build -force compute.pkr.hcl
+    $ packer.io build -force core.pkr.hcl
     ```
 
 4. Test an image

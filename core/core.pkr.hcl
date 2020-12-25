@@ -10,14 +10,9 @@ variable "os_arch" {
     default = "x86_64"
 }
 
-variable "os_checksum" {
-    type    = string
-    default = "964fb135339759f54300130922b1b46dc153b6ed2f8ea538b316757f8ee707bc"
-}
-
 variable "os_mirror" {
     type    = string
-    default = "http://mirrors.kernel.org/fedora"
+    default = "http://mirrors.kernel.org/fedora/releases"
 }
 
 variable "os_version" {
@@ -38,23 +33,21 @@ variable "userpass" {
 source "qemu" "core" {
     accelerator      = "kvm"
     boot_command     = [
-	"e<down><down><end> ",
-	"inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg ",
-	"inst.text ",
-	"modprobe.blacklist=floppy",
-	"<leftCtrlOn>x<leftCtrlOff>"
+        "e<down><down><end> ",
+        "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg ",
+        "<leftCtrlOn>x<leftCtrlOff>"
     ]
     boot_wait        = "10s"
-    cpus             = "2"
+    cpus             = 2
     disk_compression = true
     disk_interface   = "virtio-scsi"
     disk_size        = "20G"
     format           = "qcow2"
     headless         = true
     http_directory   = "./http"
-    iso_checksum     = "sha256:${var.os_checksum}"
-    iso_url          = "${var.os_mirror}/releases/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-netinst-${var.os_arch}-${var.os_version}-${var.os_version_minor}.iso"
-    memory           = "2048"
+    iso_checksum     = "file:${var.os_mirror}/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-${var.os_version}-${var.os_version_minor}-${var.os_arch}-CHECKSUM"
+    iso_url          = "${var.os_mirror}/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-netinst-${var.os_arch}-${var.os_version}-${var.os_version_minor}.iso"
+    memory           = 2048
     net_device       = "virtio-net"
     output_directory = "build/"
     qemuargs         = [["-bios", "/usr/share/edk2/ovmf/OVMF_CODE.fd"]]
@@ -70,28 +63,28 @@ build {
     sources = ["source.qemu.core"]
 
     provisioner "ansible" {
-	ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
-	extra_arguments        = [
-	    "-e ansible_python_interpreter=auto_silent",
-	    "-e ansible_sudo_pass=${var.userpass}",
-	    "-e vagrant_target=True"
-	]
-	playbook_file          = "./ansible/common-ansible/site.yml"
+        ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
+        extra_arguments        = [
+            "-e ansible_python_interpreter=auto_silent",
+            "-e ansible_sudo_pass=${var.userpass}",
+            "-e vagrant_target=True"
+        ]
+        playbook_file          = "./ansible/common-ansible/site.yml"
     }
 
     provisioner "ansible" {
-	ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
-	extra_arguments        = [
-	    "-e ansible_python_interpreter=auto_silent",
-	    "-e ansible_sudo_pass=${var.userpass}"
-	]
-	playbook_file          = "./ansible/hashisuite-ansible/site.yml"
+        ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
+        extra_arguments        = [
+            "-e ansible_python_interpreter=auto_silent",
+            "-e ansible_sudo_pass=${var.userpass}"
+        ]
+        playbook_file          = "./ansible/hashisuite-ansible/site.yml"
     }
 
     post-processor "vagrant" {
-	keep_input_artifact = true
-	compression_level   = 9
-	output              = "build/${var.name}.box"
-	provider_override   = "libvirt"
+        keep_input_artifact = true
+        compression_level   = 9
+        output              = "build/${var.name}.box"
+        provider_override   = "libvirt"
     }
 }
