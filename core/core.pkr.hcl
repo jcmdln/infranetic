@@ -1,33 +1,13 @@
 # core.pkr.hcl
 
-variable "name" {
-    type    = string
-    default = "infranetic-core-amd64"
-}
-
-variable "os_arch" {
-    type    = string
-    default = "x86_64"
-}
-
-variable "os_mirror" {
-    type    = string
-    default = "http://mirrors.kernel.org/fedora/releases"
-}
-
-variable "os_version" {
-    type    = string
-    default = "33"
-}
-
-variable "os_version_minor" {
-    type    = string
-    default = "1.2"
-}
-
-variable "userpass" {
-    type    = string
-    default = "infranetic"
+variables {
+    name             = "infranetic-core-amd64"
+    os_arch          = "x86_64"
+    os_mirror        = "http://mirrors.kernel.org/fedora/releases"
+    os_version       = 33
+    os_version_minor = 1.2
+    userpass         = "infranetic"
+    vagrant          = true
 }
 
 source "qemu" "core" {
@@ -67,18 +47,9 @@ build {
         extra_arguments        = [
             "-e ansible_python_interpreter=auto_silent",
             "-e ansible_sudo_pass=${var.userpass}",
-            "-e vagrant_target=True"
+            "-e vagrant_target=${var.vagrant}"
         ]
-        playbook_file          = "./ansible/common-ansible/site.yml"
-    }
-
-    provisioner "ansible" {
-        ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
-        extra_arguments        = [
-            "-e ansible_python_interpreter=auto_silent",
-            "-e ansible_sudo_pass=${var.userpass}"
-        ]
-        playbook_file          = "./ansible/hashisuite-ansible/site.yml"
+        playbook_file          = "./ansible/site.yml"
     }
 
     post-processor "vagrant" {

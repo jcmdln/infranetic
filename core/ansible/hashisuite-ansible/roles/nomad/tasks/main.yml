@@ -1,6 +1,0 @@
-# nomad/tasks/main.yml
-
-- name: Add packages
-  ansible.builtin.package:
-    name: "{{ nomad_packages }}"
-    state: present

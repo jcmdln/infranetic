@@ -1,6 +1,6 @@
-# consul/tasks/main.yml
+# vault/tasks/main.yml
 
 - name: Add packages
   ansible.builtin.package:
-    name: "{{ consul_packages }}"
+    name: "{{ vault_packages }}"
     state: present

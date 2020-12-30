@@ -1,0 +1,22 @@
+# consul/tasks/main.yml
+
+- name: Add packages
+  ansible.builtin.package:
+    name: "{{ consul_packages }}"
+    state: present
+
+- name: Configure consul-dev.service
+  ansible.builtin.template:
+    dest: /usr/lib/systemd/system/consul-dev.service
+    group: root
+    mode: 0600
+    owner: root
+    src: consul-dev.service.j2
+
+# TODO: I'd really like to run Consul rootless.
+- name: Start consul-dev.service
+  ansible.builtin.systemd:
+    enabled: true
+    name: consul-dev.service
+    #scope: user
+    state: started

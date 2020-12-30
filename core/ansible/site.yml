@@ -1,13 +1,11 @@
 # site.yml
 
-- name: compute
+- become: true
   hosts: default
-  become: true
 
   pre_tasks:
     - name: Add HashiCorp repository
       ansible.builtin.yum_repository:
-        name: "hashicorp"
         baseurl: "https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable"
         description: "hashicorp"
         enabled: true
@@ -15,7 +13,13 @@
         file: hashicorp
         gpgcheck: true
         gpgkey: "https://rpm.releases.hashicorp.com/gpg"
+        name: "hashicorp"
 
   roles:
+    - role: vault
     - role: consul
     - role: nomad
+    - role: vagrant
+      when:
+        - vagrant_target is defined
+        - vagrant_target

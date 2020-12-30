@@ -1,0 +1,4 @@
+# vault/defaults/main.yml
+
+vault_packages:
+  - vault

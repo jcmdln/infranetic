@@ -1,9 +1,0 @@
-# nomad/defaults/main.yml
-
-nomad_packages:
-  - libvirt
-  - podman
-  - podman-compose
-  - podman-plugins
-  - nomad
-  - qemu

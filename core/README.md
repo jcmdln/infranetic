@@ -66,7 +66,7 @@ Usage
 
 3. Build an image
 
-    Perform your first build:
+    Build a devel image for Vagrant:
 
     ```sh
     $ cd compute/
