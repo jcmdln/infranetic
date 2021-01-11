@@ -14,7 +14,7 @@ nomad_packages:
   - qemu
 
 nomad_driver_podman_version: "0.2.0"
-nomad_driver_podman: >-
+nomad_driver_podman_url_prefix: >-
   https://releases.hashicorp.com/nomad-driver-podman/
   {{- nomad_driver_podman_version -}}/nomad-driver-podman_
   {{- nomad_driver_podman_version -}}

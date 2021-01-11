@@ -16,9 +16,9 @@
         name: "hashicorp"
 
   roles:
-    - role: vault
     - role: consul
     - role: nomad
+    - role: vault
     - role: vagrant
       when:
         - vagrant_target is defined

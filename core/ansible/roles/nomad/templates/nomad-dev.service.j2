@@ -2,14 +2,14 @@
 # {{ ansible_managed }}
 
 [Unit]
-Description=Nomad -dev
+Description=nomad-dev
 Documentation=https://nomadproject.io/docs/
 Wants=network-online.target
 After=network-online.target
 
 [Service]
 ExecReload=/bin/kill -HUP $MAINPID
-ExecStart=/usr/bin/nomad agent -config /etc/nomad.d -dev
+ExecStart=/usr/bin/nomad agent -config=/etc/nomad.d -dev
 KillMode=process
 KillSignal=SIGINT
 LimitNOFILE=65536

@@ -1,0 +1,24 @@
+# {{ template_destpath }}
+# {{ ansible_managed }}
+
+api_addr     = "http://{{ vault_listener_address }}"
+cluster_addr = "http://{{ vault_cluster_address }}"
+ui           = false
+
+# https://www.vaultproject.io/docs/configuration/listener
+listener "tcp" {
+    address     = "{{ vault_listener_address }}"
+    tls_disable = true
+}
+
+# https://www.vaultproject.io/docs/configuration/storage
+storage "consul" {
+    address = "{{ vault_storage_address }}"
+    path    = "{{ vault_storage_path }}"
+}
+
+# https://www.vaultproject.io/docs/configuration/telemetry
+telemetry {
+    statsite_address = "{{ vault_telemetry_address }}"
+    disable_hostname = {{ vault_telemetry_disable_hostname|lower }}
+}
