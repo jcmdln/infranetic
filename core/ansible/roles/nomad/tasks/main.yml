@@ -3,61 +3,61 @@
 - name: Add packages
   ansible.builtin.package:
     name: "{{ nomad_packages }}"
-    state: "present"
+    state: present
 
 # TODO: I'd really like to run Podman rootless
 - name: Start and enable user podman.socket
   ansible.builtin.systemd:
     enabled: true
-    name: "podman.socket"
-    #scope: "user"
-    state: "started"
+    name: podman.socket
+    #scope: user
+    state: started
 
 - name: Create nomad_directories
   ansible.builtin.file:
-    group: "nomad"
+    group: nomad
     mode: 0755
-    owner: "nomad"
+    owner: nomad
     path: "{{ item }}"
-    state: "directory"
+    state: directory
   with_items:
     - "{{ nomad_directories }}"
 
 - name: Download and verify nomad-driver-podman
   ansible.builtin.get_url:
     checksum: "sha256:{{ nomad_driver_podman_url_prefix }}_SHA256SUMS"
-    dest: "/tmp/nomad-driver-podman.zip"
+    dest: /tmp/nomad-driver-podman.zip
     url: "{{ nomad_driver_podman_url_prefix }}_linux_amd64.zip"
 
 - name: Unarchive nomad-driver-podman
   ansible.builtin.unarchive:
-    dest: "/opt/nomad/plugins"
-    group: "nomad"
+    dest: /opt/nomad/plugins
+    group: nomad
     mode: 0755
-    owner: "nomad"
+    owner: nomad
     remote_src: true
-    src: "/tmp/nomad-driver-podman.zip"
+    src: /tmp/nomad-driver-podman.zip
 
 - name: Configure nomad
   ansible.builtin.template:
-    dest: "/etc/nomad.d/nomad.hcl"
-    group: "nomad"
+    dest: /etc/nomad.d/nomad.hcl
+    group: nomad
     mode: 0755
-    owner: "nomad"
-    src: "nomad.hcl.j2"
+    owner: nomad
+    src: nomad.hcl.j2
 
 - name: Configure nomad-dev.service
   ansible.builtin.template:
-    dest: "/usr/lib/systemd/system/nomad-dev.service"
-    group: "root"
+    dest: /usr/lib/systemd/system/nomad-dev.service
+    group: root
     mode: 0600
-    owner: "root"
-    src: "nomad-dev.service.j2"
+    owner: root
+    src: nomad-dev.service.j2
 
 # TODO: I'd really like to run Nomad rootless.
 - name: Start nomad-dev.service
   ansible.builtin.systemd:
     enabled: true
-    name: "nomad-dev.service"
-    #scope: "user"
-    state: "started"
+    name: nomad-dev.service
+    #scope: user
+    state: started

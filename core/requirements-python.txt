@@ -1,3 +1,4 @@
 # requirements-python.txt
 
 ansible>=2.10,<2.11
+cryptography>=3.3,<4

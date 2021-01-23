@@ -16,7 +16,7 @@ distribution:
 * https://github.com/hashicorp/vagrant
 
 
-Usage
+Building
 ----------
 
 1. Prepare the host system
@@ -55,7 +55,7 @@ Usage
 
     Install Python dependencies:
     ```sh
-    (.venv) $ pip install -r requirements-python.yml
+    (.venv) $ pip install -r requirements-python.txt
     ```
 
     Install Ansible dependencies:
@@ -104,3 +104,17 @@ Usage
     # SSH into the running box
     $ vagrant ssh
     ```
+
+
+Usage
+----------
+WIP
+
+### Vault
+Be sure to use `-tls-skip-verify` since we use a self-signed certificate. In
+the future, this will be replaced by an option to generate a letsencrypt SSL if
+you have a valid domain to associate.
+
+	```sh
+	$ vault status -tls-skip-verify
+	```
