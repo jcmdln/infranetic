@@ -21,88 +21,49 @@ Building
 
 1. Prepare the host system
 
-    Add HashiCorp repo:
-
     ```sh
     $ sudo dnf config-manager \
         --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo \
         --exclude vagrant*
-    ```
-
-    Add system dependencies:
-
-    ```sh
-    $ sudo dnf install -y dnf-plugins-core gcc krb5-devel libguestfs-tools-c \
-        libvirt libvirt-client libvirt-devel libxml2-devel libxslt-devel make \
-        packer ruby-devel vagrant vagrant-libvirt
-    ```
-
-    (Optional) Add user to 'libvirt' group:
-
-    ```sh
+    $ sudo dnf install -y \
+        libvirt-client packer python3-virtualenv vagrant-libvirt
+    $ sudo unlink /usr/sbin/packer
     $ sudo gpasswd -a $USER libvirt
     $ newgrp libvirt
     ```
 
 2. Add build dependencies
 
-    Setup virtualenv:
-
     ```sh
     $ virtualenv .venv
     $ source .venv/bin/activate
-    ```
-
-    Install Python dependencies:
-    ```sh
     (.venv) $ pip install -r requirements-python.txt
-    ```
-
-    Install Ansible dependencies:
-
-    ```sh
     (.venv) $ ansible-galaxy install -r requirements-ansible.yml
     ```
 
 3. Build an image
 
-    Build a devel image for Vagrant:
-
     ```sh
-    $ cd compute/
-    $ packer.io build core.pkr.hcl
-    ```
+    (.venv) $ packer build core.pkr.hcl
 
-    If you are rebuilding an image, perform the following steps to remove any
-    intermediary cached images, otherwise the vagrant box will be started with
-    the old image and any changes you expect to be there won't be reflected:
-
-    ```sh
-    # Destroy the existing instance
-    $ vagrant destroy
-
-    # Remove the box from Vagrant
-    $ vagrant box remove infranetic/core
-
-    # Remove the image from libvirt
-    $ virsh vol-list --pool default | awk '{print $1}' | grep infranetic |
-        grep core | xargs virsh vol-delete --pool default --vol
-
-    # Force a rebuild of the base image
-    $ packer.io build -force core.pkr.hcl
+    # To rebuild after testing an image, run the following
+    (.venv) $ vagrant destroy
+    (.venv) $ vagrant box remove infranetic/core
+    (.venv) $ virsh vol-list --pool default |
+        awk '{print $1}' |
+        grep infranetic |
+        grep core |
+        xargs virsh vol-delete --pool default --vol
+    (.venv) $ packer build -force core.pkr.hcl
     ```
 
 4. Test an image
 
     ```sh
-    # Add the image to Vagrant
-    $ vagrant box add --name infranetic/core ./build/infranetic-core-amd64.box
-
-    # Bring the vagrant box up
-    $ vagrant up
-
-    # SSH into the running box
-    $ vagrant ssh
+    (.venv) $ vagrant box add \
+        --name infranetic/core ./build/infranetic-core-amd64.box
+    (.venv) $ vagrant up
+    (.venv) $ vagrant ssh
     ```
 
 
