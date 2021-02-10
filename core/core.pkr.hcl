@@ -8,6 +8,29 @@ variables {
     os_version_minor = 1.2
     userpass         = "infranetic"
     vagrant          = true
+
+    ansible_settings = [
+        "ANSIBLE_ANY_ERRORS_FATAL=True",
+        "ANSIBLE_BECOME_METHOD='sudo'",
+        "ANSIBLE_CALLBACK_WHITELIST=profile_roles,timer",
+        "ANSIBLE_COMMAND_WARNINGS=False",
+        "ANSIBLE_DIFF_ALWAYS=True",
+        "ANSIBLE_FORKS=50",
+        "ANSIBLE_GATHER_SUBSET=hardware,min,network,virtual",
+        "ANSIBLE_GATHER_TIMEOUT=300",
+        "ANSIBLE_GATHERING='smart'",
+        "ANSIBLE_INJECT_FACT_VARS=True",
+        "ANSIBLE_INVENTORY_ANY_UNPARSED_IS_FAILED=True",
+        "ANSIBLE_NOCOWS=True",
+        "ANSIBLE_PERSISTENT_COMMAND_TIMEOUT=300",
+        "ANSIBLE_PERSISTENT_CONNECT_TIMEOUT=300",
+        "ANSIBLE_PIPELINING=True",
+        "ANSIBLE_SFTP_BATCH_MODE=True",
+        "ANSIBLE_SSH_ARGS='-C -o ControlMaster=auto -o ControlPersist=60s -o PreferredAuthentications=publickey'",
+        "ANSIBLE_SSH_RETRIES=1",
+        "ANSIBLE_TIMEOUT=300",
+        "ANSIBLE_TRANSPORT='ssh'",
+    ]
 }
 
 source "qemu" "core" {
@@ -43,6 +66,7 @@ build {
     sources = ["source.qemu.core"]
 
     provisioner "ansible" {
+        ansible_env_vars       = "${var.ansible_settings}"
         ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
         extra_arguments        = [
             "-e ansible_python_interpreter=auto_silent",
