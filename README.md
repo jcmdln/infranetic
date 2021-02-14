@@ -38,8 +38,6 @@ Building
 ----------
 ```sh
 $ packer build core.pkr.hcl
-$ vagrant box add --name infranetic/core ./build/infranetic-core-amd64.box
-$ vagrant up
 ```
 
 To rebuild an image, perform the following steps:
@@ -54,7 +52,9 @@ $ packer build -force core.pkr.hcl
 
 Running
 ----------
+### Locally with Vagrant
 ```sh
+$ vagrant box add --name infranetic/core ./build/infranetic-core-amd64.box
 $ vagrant up
 $ vagrant ssh
 ```

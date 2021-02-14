@@ -1,16 +1,17 @@
 ---
 - name: Setup localhost for building Infranetic
   hosts: localhost
-  become: true
 
   vars:
     ansible_connection: local
+    current_user: "{{ ansible_user_id }}"
 
   tasks:
     - name: Add dnf management packages
       ansible.builtin.package:
         name: python3-dnf
         state: present
+      become: true
 
     - name: Add official HashiCorp repository
       ansible.builtin.yum_repository:
@@ -24,6 +25,7 @@
         gpgkey: https://rpm.releases.hashicorp.com/gpg
         name: hashicorp
         state: present
+      become: true
 
     - name: Add required packages
       ansible.builtin.package:
@@ -31,16 +33,32 @@
           - libvirt-client
           - packer
           - python3-virtualenv
+          - vagrant-hostmanager
           - vagrant-libvirt
         state: present
+      become: true
 
     - name: Remove conflicting cracklib-packer symlink
       ansible.builtin.file:
         path: /usr/sbin/packer
         state: absent
+      become: true
 
     - name: Add current user to libvirt group
       ansible.builtin.user:
         append: yes
         groups: libvirt
         name: "{{ ansible_user_id }}"
+      become: true
+
+    - name: Allow user to run 'vagrant hostmanager'
+      ansible.builtin.blockinfile:
+        create: true
+        block: >-
+          {{ current_user }} ALL=(root) NOPASSWD: /bin/cp
+          /home/{{ current_user }}/.vagrant.d/tmp/hosts.local /etc/hosts
+        owner: root
+        group: root
+        mode: 440
+        path: /etc/sudoers.d/vagrant-hostmanager
+      become: true
