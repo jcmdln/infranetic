@@ -1,0 +1,46 @@
+---
+- name: Setup localhost for building Infranetic
+  hosts: localhost
+  become: true
+
+  vars:
+    ansible_connection: local
+
+  tasks:
+    - name: Add dnf management packages
+      ansible.builtin.package:
+        name: python3-dnf
+        state: present
+
+    - name: Add official HashiCorp repository
+      ansible.builtin.yum_repository:
+        baseurl: >-
+          https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
+        description: hashicorp
+        enabled: true
+        exclude: vagrant*
+        file: hashicorp
+        gpgcheck: true
+        gpgkey: https://rpm.releases.hashicorp.com/gpg
+        name: hashicorp
+        state: present
+
+    - name: Add required packages
+      ansible.builtin.package:
+        name:
+          - libvirt-client
+          - packer
+          - python3-virtualenv
+          - vagrant-libvirt
+        state: present
+
+    - name: Remove conflicting cracklib-packer symlink
+      ansible.builtin.file:
+        path: /usr/sbin/packer
+        state: absent
+
+    - name: Add current user to libvirt group
+      ansible.builtin.user:
+        append: yes
+        groups: libvirt
+        name: "{{ ansible_user_id }}"

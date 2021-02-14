@@ -37,7 +37,7 @@ source "qemu" "core" {
     accelerator      = "kvm"
     boot_command     = [
         "e<down><down><end> ",
-        "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg ",
+        "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/kickstart.cfg ",
         "<leftCtrlOn>x<leftCtrlOff>"
     ]
     boot_wait        = "10s"
@@ -47,7 +47,7 @@ source "qemu" "core" {
     disk_size        = "20G"
     format           = "qcow2"
     headless         = true
-    http_directory   = "./http"
+    http_directory   = "./"
     iso_checksum     = "file:${var.os_mirror}/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-${var.os_version}-${var.os_version_minor}-${var.os_arch}-CHECKSUM"
     iso_url          = "${var.os_mirror}/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-netinst-${var.os_arch}-${var.os_version}-${var.os_version_minor}.iso"
     memory           = 2048

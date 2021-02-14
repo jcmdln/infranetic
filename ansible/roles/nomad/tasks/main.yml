@@ -5,6 +5,13 @@
     name: "{{ nomad_packages }}"
     state: present
 
+# - name: Add packages
+#   ansible.builtin.user:
+#     name: nomad
+#     state: present
+#     groups: libvirt
+#     append: true
+
 # TODO: I'd really like to run Podman rootless
 - name: Start and enable user podman.socket
   ansible.builtin.systemd:

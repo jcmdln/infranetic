@@ -1,13 +1,11 @@
 # .gitignore
-#
-# source: https://github.com/github/gitignore
-# commit: 218a941be92679ce67d0484547e3e142b2f5f6f0
 
 #
 # Ansible
 #
 
 *.retry
+
 
 #
 # Packer
@@ -24,6 +22,7 @@ crash.log
 
 # For built boxes
 *.box
+
 
 #
 # Python
@@ -167,6 +166,7 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
 
 #
 # Vagrant
