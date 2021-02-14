@@ -1,7 +1,7 @@
-# core.pkr.hcl
+# infranetic.pkr.hcl
 
 variables {
-    name             = "infranetic-core-amd64"
+    name             = "infranetic-amd64"
     os_arch          = "x86_64"
     os_mirror        = "http://mirrors.kernel.org/fedora/releases"
     os_version       = 33

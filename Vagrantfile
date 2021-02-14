@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
   config.ssh.password = "infranetic"
   config.ssh.username = "infranetic"
   config.ssh.verify_host_key = false
-  config.vm.box = "infranetic/core"
+  config.vm.box = "infranetic"
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.vm.provider "libvirt" do |v|
     v.cpus = 2

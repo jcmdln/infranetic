@@ -28,7 +28,7 @@ Linux distribution:
 Preparing
 ----------
 ```sh
-$ sudo dnf install -y ansible python3-molecule-podman
+$ sudo dnf install -y ansible
 $ ansible-galaxy collection install -r ansible/requirements.yml
 $ ansible-playbook --ask-become-pass ansible/setup.yml
 $ newgrp libvirt
@@ -37,24 +37,24 @@ $ newgrp libvirt
 Building
 ----------
 ```sh
-$ packer build core.pkr.hcl
+$ packer build infranetic.pkr.hcl
 ```
 
-To rebuild an image, perform the following steps:
+To rebuild and use a new image, perform the following steps:
 
 ```sh
-$ vagrant destroy
-$ vagrant box remove infranetic/core
-$ virsh vol-list --pool default | awk '/infranetic/ && /core/ {print $1}' |
+$ vagrant destroy -f
+$ vagrant box remove infranetic
+$ virsh vol-list --pool default | awk '/infranetic/ {print $1}' |
     xargs virsh vol-delete --pool default --vol
-$ packer build -force core.pkr.hcl
+$ packer build -force infranetic.pkr.hcl
 ```
 
 Running
 ----------
 ### Locally with Vagrant
 ```sh
-$ vagrant box add --name infranetic/core ./build/infranetic-core-amd64.box
+$ vagrant box add --name infranetic ./build/infranetic-amd64.box
 $ vagrant up
 $ vagrant ssh
 ```
