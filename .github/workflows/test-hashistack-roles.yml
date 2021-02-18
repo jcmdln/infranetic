@@ -1,0 +1,31 @@
+---
+name: Test hashistack-ansible/roles using Ansible Molecule
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test_hashistack_roles:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        molecule_roles:
+          - consul
+          - nomad
+          - vault
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - run: pip install -r ./ansible/hashistack-ansible/requirements.txt
+
+      - run: >-
+          cd ./ansible/hashistack-ansible/roles/${{matrix.molecule_roles}} &&
+          molecule test

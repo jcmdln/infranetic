@@ -1,5 +1,0 @@
-# requirements-ansible.yml
-
-collections:
-  - name: ansible.posix
-  - name: community.crypto

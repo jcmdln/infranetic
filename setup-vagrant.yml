@@ -1,0 +1,23 @@
+---
+# NOTE: THIS SHOULD ONLY BE USED BY PACKER
+- become: true
+  gather_facts: false
+  hosts: all
+
+  tasks:
+    - name: Add Vagrant user
+      ansible.builtin.user:
+        name: vagrant
+        state: present
+
+    - name: Add Vagrant pubkey
+      ansible.posix.authorized_key:
+        user: vagrant
+        state: present
+        key: https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
+
+    - name: Grant password-less sudo to user vagrant
+      ansible.builtin.blockinfile:
+        block: |
+          vagrant ALL=(ALL) NOPASSWD: ALL
+        path: /etc/sudoers

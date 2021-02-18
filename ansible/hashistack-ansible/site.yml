@@ -1,0 +1,8 @@
+---
+# - name: Setup HashiStack servers
+#   become: true
+#   hosts: servers
+#   roles:
+#     - role: vault
+#     - role: consul
+#     - role: nomad

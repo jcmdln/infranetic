@@ -1,0 +1,11 @@
+---
+all:
+  vars:
+    ansible_connection: ssh
+    ansible_user: infranetic
+
+servers:
+  hosts:
+    infranetic-1.local:
+    infranetic-2.local:
+    infranetic-3.local:

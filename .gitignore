@@ -5,6 +5,7 @@
 #
 
 *.retry
+inventory.yml
 
 
 #

@@ -1,4 +1,0 @@
-# .gitignore
-
-# Ignore all items within Ansible collections directory.
-**/collections/**

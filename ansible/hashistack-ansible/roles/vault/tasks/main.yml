@@ -1,0 +1,51 @@
+---
+- name: Add hashicorp-vault-stable repository
+  ansible.builtin.yum_repository:
+    baseurl: >-
+      https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
+    description: hashicorp-vault-stable
+    enabled: true
+    file: hashicorp
+    gpgcheck: true
+    gpgkey: https://rpm.releases.hashicorp.com/gpg
+    include: vault
+    name: vault
+    state: present
+
+- name: Add vault user
+  ansible.builtin.user:
+    name: vault
+    state: present
+
+- name: Add packages
+  ansible.builtin.package:
+    name: "{{ vault_packages }}"
+    state: present
+
+- name: Create vault_directories
+  ansible.builtin.file:
+    group: vault
+    mode: 0755
+    owner: vault
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ vault_directories }}"
+
+- name: Configure vault
+  ansible.builtin.template:
+    dest: /etc/vault.d/vault.hcl
+    group: vault
+    mode: 0755
+    owner: vault
+    src: vault.hcl.j2
+
+#- name: Start vault.service as user 'vault'
+#  ansible.builtin.systemd:
+#    enabled: true
+#    name: vault.service
+#    scope: user
+#    state: started
+#  become: true
+#  become_method: sudo
+#  become_user: vault

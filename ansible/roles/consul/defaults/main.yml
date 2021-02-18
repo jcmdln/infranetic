@@ -1,4 +1,0 @@
-# consul/defaults/main.yml
-
-consul_packages:
-  - consul
