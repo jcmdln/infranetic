@@ -32,6 +32,7 @@
         name:
           - libvirt-client
           - packer
+          - terraform
           - vagrant-hostmanager
           - vagrant-libvirt
         state: present
