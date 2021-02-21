@@ -29,3 +29,5 @@ jobs:
       - run: >-
           cd ./ansible/hashistack-ansible/roles/${{matrix.molecule_roles}} &&
           molecule test
+        env:
+          ANSIBLE_PIPELINING: true

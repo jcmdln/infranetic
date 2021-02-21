@@ -29,5 +29,7 @@ provisioner:
       var_compression_level: 9
     diff:
       always: true
+    ssh-connection:
+      pipelining: true
 verifier:
   name: ansible

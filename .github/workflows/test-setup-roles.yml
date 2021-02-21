@@ -27,3 +27,5 @@ jobs:
       - run: >-
           cd ./ansible/setup-ansible/roles/${{matrix.molecule_roles}} &&
           molecule test
+        env:
+          ANSIBLE_PIPELINING: true
