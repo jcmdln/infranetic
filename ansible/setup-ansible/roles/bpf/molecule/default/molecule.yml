@@ -14,7 +14,6 @@ platforms:
     image: fedora:33
     dockerfile: Containerfile
     pre_build_image: false
-    command: /sbin/init
 provisioner:
   name: ansible
   config_options:

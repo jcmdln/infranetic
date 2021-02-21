@@ -14,13 +14,12 @@ platforms:
     image: fedora:33
     dockerfile: Containerfile
     pre_build_image: false
-    command: /sbin/init
 provisioner:
   name: ansible
   config_options:
     defaults:
       any_errors_fatal: true
-      callback_whitelist: "profile_tasks, timer"
+      callback_whitelist: "profile_tasks,timer"
       command_warnings: false
       gather_subset: "hardware,min,network,virtual"
       internal_poll_interval: 0.01
