@@ -10,6 +10,11 @@
         name: vagrant
         state: present
 
+    - name: Set Vagrant user password to 'vagrant'
+      command: >-
+        echo 'vagrant' | passwd --stdin vagrant
+      changed: false
+
     - name: Add Vagrant pubkey
       ansible.posix.authorized_key:
         user: vagrant
@@ -20,4 +25,5 @@
       ansible.builtin.blockinfile:
         block: |
           vagrant ALL=(ALL) NOPASSWD: ALL
-        path: /etc/sudoers
+        path: /etc/sudoers.d/vagrant
+        create: true
