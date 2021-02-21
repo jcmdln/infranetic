@@ -25,32 +25,38 @@ Preparing
 ----------
 ```sh
 $ sudo dnf install -y ansible
-$ ansible-playbook --ask-become-pass setup-local.yml
+$ ansible-playbook --ask-become-pass setup-localhost.yml
 $ newgrp libvirt
 ```
 
 Building
 ----------
-### For use with Vagrant
+### For local use with Vagrant
 ```sh
-$ packer build infranetic.pkr.hcl
-$ vagrant box add --force --name infranetic ./build/infranetic-amd64.box
-```
-
-To rebuild and use a new image, perform the following steps:
-
-```sh
-$ vagrant destroy -f
-$ virsh vol-list --pool default | awk '/infranetic/ {print $1}' |
-    xargs virsh vol-delete --pool default --vol
-$ packer build -force infranetic.pkr.hcl
-$ vagrant box add --force --name infranetic ./build/infranetic-amd64.box
-```
-
-Running
-----------
-### Locally with Vagrant
-```sh
+$ packer build -only="vagrant.*" infranetic.pkr.hcl
+$ vagrant box add --name infranetic ./build/infranetic-amd64.box
 $ vagrant up --no-parallel
 $ vagrant ssh <instance>
 ```
+
+To rebuild and use a new image, perform the following steps before running the
+steps outlined above:
+
+```sh
+$ vagrant destroy -f
+$ vagrant box remove infranetic
+$ virsh vol-list --pool default | awk '/infranetic/ {print $1}' |
+    xargs virsh vol-delete --pool default --vol
+$ rm -rf build
+```
+
+### For use with Cloud Providers via Terraform
+WIP
+
+Deploying
+----------
+### Locally with Vagrant + Ansible
+WIP
+
+### In the cloud with Terraform + Ansible
+WIP
