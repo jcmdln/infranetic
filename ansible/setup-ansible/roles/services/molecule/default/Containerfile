@@ -3,4 +3,4 @@ RUN dnf upgrade -y && \
     dnf install -y systemd && \
     dnf autoremove -y && \
     dnf clean all
-CMD [ "/sbin/init" ]
+CMD ["/sbin/init"]

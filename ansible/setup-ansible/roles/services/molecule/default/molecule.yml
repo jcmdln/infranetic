@@ -12,6 +12,7 @@ lint: |
 platforms:
   - name: instance
     image: fedora:33
+    command: /sbin/init
     dockerfile: Containerfile
     pre_build_image: false
 provisioner:
@@ -28,7 +29,5 @@ provisioner:
       var_compression_level: 9
     diff:
       always: true
-    ssh-connection:
-      pipelining: true
 verifier:
   name: ansible

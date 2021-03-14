@@ -12,6 +12,7 @@ lint: |
 platforms:
   - name: instance
     image: fedora:33
+    command: /sbin/init
     dockerfile: Containerfile
     pre_build_image: false
 provisioner:
