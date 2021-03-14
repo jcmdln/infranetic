@@ -79,15 +79,6 @@ build {
     name = "vagrant"
     sources = ["source.qemu.infranetic"]
 
-    provisioner "ansible" {
-        ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
-        extra_arguments = [
-            "-e ansible_python_interpreter=auto_silent",
-            "-e ansible_sudo_pass=${var.userpass}",
-        ]
-        playbook_file = "./setup-vagrant.yml"
-    }
-
     post-processor "vagrant" {
         compression_level = 9
         keep_input_artifact = true
