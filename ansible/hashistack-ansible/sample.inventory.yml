@@ -1,4 +1,7 @@
 ---
+# This inventory file is an example intended for use with Vagrant, though 
+# serves as an example of how this playbook might be used against remote hosts
+# such as those deployed using Terraform.
 all:
   vars:
     ansible_connection: ssh
