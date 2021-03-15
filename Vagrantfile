@@ -18,15 +18,15 @@ Vagrant.configure("2") do |config|
   end
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
-  config.vm.define :server_1 do |c|
-    c.vm.hostname = "infranetic-1.local"
+  config.vm.define :local_server_1 do |c|
+    c.vm.hostname = "local-server-1"
   end
 
-  config.vm.define :server_2 do |c|
-    c.vm.hostname = "infranetic-2.local"
+  config.vm.define :local_server_2 do |c|
+    c.vm.hostname = "local-server-2"
   end
 
-  config.vm.define :server_3 do |c|
-    c.vm.hostname = "infranetic-3.local"
+  config.vm.define :local_server_3 do |c|
+    c.vm.hostname = "local-server-3"
   end
 end
