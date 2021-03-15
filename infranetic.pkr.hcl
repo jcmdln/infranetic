@@ -60,7 +60,7 @@ source "qemu" "infranetic" {
     iso_url = "${var.os_mirror}/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-netinst-${var.os_arch}-${var.os_version}-${var.os_version_minor}.iso"
     memory = 2048
     net_device = "virtio-net"
-    output_directory = "./build/images"
+    output_directory = "./build"
     qemuargs = [["-bios", "/usr/share/edk2/ovmf/OVMF_CODE.fd"]]
     shutdown_command = "echo ${var.userpass} | sudo -S poweroff"
     ssh_agent_auth = false
@@ -71,12 +71,6 @@ source "qemu" "infranetic" {
 }
 
 build {
-    name = "terraform"
-    sources = ["source.qemu.infranetic"]
-}
-
-build {
-    name = "vagrant"
     sources = ["source.qemu.infranetic"]
 
     post-processor "vagrant" {

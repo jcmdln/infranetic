@@ -6,8 +6,20 @@ REMOVED OR REPLACED WITH FRIENDLIER WORDING.
 
 This repository is an attempt to formalize a working definition of reproducible
 infrastructure that can be trivially replicated on commodity hardware. Our goal
-is to deploy workload orchestrators locally using vagrant, to cloud providers
-using Terraform, or on-premesis bare metal servers via PXE.
+is to deploy workload orchestrators locally using Vagrant, to cloud providers
+using Terraform, or on-premises bare metal servers via PXE.
+
+There are many ideas that have inspired this project, though here are some we
+would like to highlight:
+
+* [Ansible and HashiCorp: Better Together (hashicorp.com)](
+  https://www.hashicorp.com/resources/ansible-terraform-better-together)
+* [Containers at Facebook by Lindsay Salisbury (youtube.com)](
+  https://www.youtube.com/watch?v=_Qc9jBk18w8)
+* [Mastering Chaos - A Netflix Guide to Microservices (youtube.com)](
+  https://www.youtube.com/watch?v=CZ3wIuvmHeM)
+* [BPF performance analysis at Netflix (youtube.com)](
+  https://www.youtube.com/watch?v=16slh29iN1g)
 
 
 Usage
@@ -33,7 +45,7 @@ Building
 ----------
 ### For local use with Vagrant
 ```sh
-$ packer build -only="vagrant.*" infranetic.pkr.hcl
+$ packer build infranetic.pkr.hcl
 $ vagrant box add --name infranetic ./build/infranetic-amd64.box
 $ vagrant up --no-parallel
 $ vagrant ssh <instance>
