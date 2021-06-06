@@ -1,6 +1,0 @@
----
-- name: Setup hosts
-  become: true
-  hosts: servers
-  roles:
-    - role: services

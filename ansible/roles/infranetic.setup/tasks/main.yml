@@ -1,0 +1,9 @@
+# infranetic.services/tasks/main.yml
+---
+- name: Install packages
+  ansible.builtin.package:
+    name: "{{ setup_packages }}"
+    state: present
+
+- name: Configure dnf-automatic
+  include_tasks: dnf-automatic.yml

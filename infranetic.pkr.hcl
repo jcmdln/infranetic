@@ -1,6 +1,8 @@
+# infranetic.pkr.hcl
+
 variable "name" {
     type = string
-    default = "infranetic-amd64"
+    default = "infranetic-fedora"
 }
 
 variable "os_arch" {
@@ -10,17 +12,17 @@ variable "os_arch" {
 
 variable "os_mirror" {
     type = string
-    default = "http://mirrors.kernel.org/fedora/releases"
+    default = "https://mirrors.kernel.org/fedora/releases"
 }
 
 variable "os_version" {
     type = number
-    default = 33
+    default = 34
 }
 
 variable "os_version_minor" {
     type = number
-    default = "1.2"
+    default = 1.2
 }
 
 variable "userpass" {
@@ -28,17 +30,9 @@ variable "userpass" {
     default = "infranetic"
 }
 
-variable "ansible_settings" {
-    type = list(string)
-    default = [
-        "ANSIBLE_ANY_ERRORS_FATAL=True",
-        "ANSIBLE_CALLBACK_WHITELIST=profile_roles,timer",
-        "ANSIBLE_COMMAND_WARNINGS=False",
-        "ANSIBLE_DIFF_ALWAYS=True",
-        "ANSIBLE_GATHER_SUBSET=hardware,min,network,virtual",
-        "ANSIBLE_INVENTORY_ANY_UNPARSED_IS_FAILED=True",
-        "ANSIBLE_NOCOWS=True",
-    ]
+locals {
+    imagename = "${var.name}-${var.os_version}-${var.os_version_minor}-${var.os_arch}"
+    timestamp = formatdate("YYYYMMDD'T'hhmmssZZZZ", timestamp())
 }
 
 source "qemu" "infranetic" {
@@ -67,16 +61,38 @@ source "qemu" "infranetic" {
     ssh_password = "${var.userpass}"
     ssh_timeout = "15m"
     ssh_username = "${var.userpass}"
-    vm_name = "${var.name}.qcow2"
+    vm_name = "${local.imagename}-${local.timestamp}.qcow2"
 }
 
 build {
     sources = ["source.qemu.infranetic"]
 
+    provisioner "ansible" {
+        ansible_env_vars = [
+            "ANSIBLE_ANY_ERRORS_FATAL=True",
+            "ANSIBLE_CALLBACK_WHITELIST=profile_roles,timer",
+            "ANSIBLE_COMMAND_WARNINGS=False",
+            "ANSIBLE_DIFF_ALWAYS=True",
+            "ANSIBLE_GATHER_SUBSET=hardware,min,network,virtual",
+            "ANSIBLE_INVENTORY_ANY_UNPARSED_IS_FAILED=True",
+            "ANSIBLE_NOCOWS=True",
+        ]
+        ansible_ssh_extra_args = ["-o PubkeyAcceptedKeyTypes=+ssh-dss"]
+        extra_arguments = [
+            "-e ansible_python_interpreter=auto_silent",
+            "-e ansible_sudo_pass=${var.userpass}",
+        ]
+        playbook_file = "./ansible/site-setup.yml"
+    }
+
+    provisioner "shell" {
+        inline = ["rm -rf ~/~*"]
+    }
+
     post-processor "vagrant" {
         compression_level = 9
         keep_input_artifact = true
-        output = "./build/${var.name}.box"
+        output = "./build/${local.imagename}-${local.timestamp}.box"
         provider_override = "libvirt"
     }
 }

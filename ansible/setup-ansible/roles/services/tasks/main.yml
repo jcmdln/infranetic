@@ -1,4 +1,0 @@
----
-- name: Setup dnf-automatic
-  include_tasks: dnf-automatic.yml
-  when: dnf_automatic_enabled

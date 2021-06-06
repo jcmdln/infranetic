@@ -1,0 +1,51 @@
+# setup-vagrant.yml
+---
+- name: Build infranetic vagrant box
+  hosts: localhost
+
+  vars:
+    ansible_connection: local
+    current_user: "{{ansible_user_id}}"
+
+  tasks:
+    - name: Destroy initialized infranetic boxes
+      ansible.builtin.raw: >-
+        vagrant destroy -f
+      changed_when: result.rc == 0
+      failed_when: false
+      register: result
+
+    - name: Remove infranetic vagrant boxes
+      ansible.builtin.raw: >-
+        vagrant box remove infranetic
+      changed_when: result.rc == 0
+      failed_when: false
+      register: result
+
+    - name: Remove infranetic libvirt volumes
+      ansible.builtin.raw: >-
+        virsh vol-list --pool default |
+        awk '/infranetic/ {print $1}' |
+        xargs virsh vol-delete --pool default --vol
+      changed_when: result.rc == 0
+      failed_when: false
+      register: result
+
+    - name: Remove vagrant boxes from known hosts
+      ansible.builtin.raw: >-
+        ssh-keygen -R {{item}}
+      changed_when: result.rc == 0
+      failed_when: false
+      loop:
+        - local-server-1
+        - local-server-2
+        - local-server-3
+      register: result
+
+    - name: Build new infranetic image
+      ansible.builtin.raw: >-
+        packer build -force infranetic.pkr.hcl
+
+    - name: Add infranetic image as vagrant box
+      ansible.builtin.raw: >-
+        vagrant box add --name infranetic ./build/infranetic-*.box

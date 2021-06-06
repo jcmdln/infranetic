@@ -1,0 +1,29 @@
+# infranetic.services/tasks/dnf-automatic.yml
+---
+- name: (dnf-automatic) Set apply_updates to "yes"
+  ansible.builtin.lineinfile:
+    line: "apply_updates = {{ apply_updates }}"
+    path: /etc/dnf/automatic.conf
+    regexp: "^apply_updates.*"
+  vars:
+    apply_updates: >-
+      {{ 'yes' if dnf_automatic_emit_via|bool
+      else 'no' }}
+
+- name: (dnf-automatic) Set emit_via to "motd"
+  ansible.builtin.lineinfile:
+    line: "emit_via = {{ dnf_automatic_emit_via }}"
+    path: /etc/dnf/automatic.conf
+    regexp: "^emit_via.*"
+
+- name: (dnf-automatic) Set upgrade_type to "security"
+  ansible.builtin.lineinfile:
+    line: "upgrade_type = {{ dnf_automatic_upgrade_type }}"
+    path: /etc/dnf/automatic.conf
+    regexp: "^upgrade_type.*"
+
+- name: Start and enable dnf-automatic timer
+  ansible.builtin.service:
+    name: dnf-automatic.timer
+    state: started
+    enabled: true

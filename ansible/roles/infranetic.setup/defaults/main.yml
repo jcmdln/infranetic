@@ -1,0 +1,45 @@
+# infranetic.setup/defaults/main.yml
+---
+setup_packages:
+  - bash-completion
+  - bind-utils
+  - bpftrace
+  - bzip2
+  - casync
+  - curl
+  - dnf-automatic
+  - findutils
+  - fwupd
+  - git
+  - gzip
+  - htop
+  - iftop
+  - iotop
+  - kernel-tools
+  - lm_sensors
+  - mg
+  - mosh
+  - msr-tools
+  - pciutils
+  - procps-ng
+  - rsync
+  - sed
+  - sysstat
+  - tar
+  - tmux
+  - tree
+  - unzip
+  - usbutils
+  - vim-minimal
+  - which
+  - whois
+  - xz
+  - zip
+
+#
+# dnf-automatic
+#
+
+dnf_automatic_apply_updates: true
+dnf_automatic_emit_via: "motd,stdio"
+dnf_automatic_upgrade_type: "security"

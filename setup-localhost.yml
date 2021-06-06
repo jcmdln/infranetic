@@ -1,10 +1,11 @@
+# setup-localhost.yml
 ---
 - name: Setup localhost for building Infranetic
   hosts: localhost
 
   vars:
     ansible_connection: local
-    current_user: "{{ ansible_user_id }}"
+    current_user: "{{ansible_user_id}}"
 
   tasks:
     - name: Add dnf management packages
@@ -46,19 +47,19 @@
 
     - name: Add current user to libvirt group
       ansible.builtin.user:
-        append: yes
+        name: "{{ansible_user_id}}"
         groups: libvirt
-        name: "{{ ansible_user_id }}"
+        append: yes
       become: true
 
     - name: Allow user to run 'vagrant hostmanager'
       ansible.builtin.blockinfile:
-        create: true
+        path: /etc/sudoers.d/vagrant-hostmanager
         block: >-
-          {{ current_user }} ALL=(root) NOPASSWD: /bin/cp
-          /home/{{ current_user }}/.vagrant.d/tmp/hosts.local /etc/hosts
+          {{current_user}} ALL=(root) NOPASSWD: /bin/cp
+          /home/{{current_user}}/.vagrant.d/tmp/hosts.local /etc/hosts
+        create: true
         owner: root
         group: root
         mode: 440
-        path: /etc/sudoers.d/vagrant-hostmanager
       become: true
