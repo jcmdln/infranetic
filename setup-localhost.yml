@@ -8,16 +8,40 @@
     current_user: "{{ansible_user_id}}"
 
   tasks:
-    - name: Add dnf management packages
-      ansible.builtin.package:
-        name: python3-dnf
+    - name: Add package management dependencies
+       ansible.builtin.package:
+         name: >-
+           {{ "python3-dnf" if ansible_os_family == "RedHat"
+           else "python3-apt" }}
+         state: present
+       become: true
+
+    - name: (Debian) Add official HashiCorp GPG key
+      ansible.builtin.apt_key:
+        url: https://apt.releases.hashicorp.com/gpg
         state: present
       become: true
+      when: ansible_os_family == "Debian"
 
-    - name: Add official HashiCorp repository
+    - name: (Debian) Add official HashiCorp repository
+      ansible.builtin.apt_repository:
+        repo: >-
+          deb [arch=amd64] https://apt.releases.hashicorp.com {{target}} main
+        filename: hashicorp
+        install_python_apt: false
+        state: present
+      vars:
+        target: "{{ lookup('pipe', 'lsb_release -cs') }}"
+      become: true
+      when: ansible_os_family == "Debian"
+
+    - name: (RedHat) Add official HashiCorp repository
       ansible.builtin.yum_repository:
         baseurl: >-
-          https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
+          https://rpm.releases.hashicorp.com/{{-
+          "fedora" if ansible_distribution == "Fedora"
+          else "RHEL"
+          -}}/$releasever/$basearch/stable
         description: hashicorp
         enabled: true
         exclude: vagrant*
@@ -27,27 +51,37 @@
         name: hashicorp
         state: present
       become: true
+      when: ansible_os_family == "RedHat"
 
     - name: Add required packages
       ansible.builtin.package:
         name:
-          - libvirt-client
           - packer
           - terraform
           - vagrant-hostmanager
           - vagrant-libvirt
+          - >-
+            {{ "libvirt-clients" if ansible_os_family == "Debian"
+            else "libvirt-client" }}
+          - >-
+            {{ "libvirt-daemon-system" if ansible_os_family == "Debian"
+            else omit }}
+          - >-
+            {{ "qemu-kvm" if ansible_os_family == "Debian"
+            else omit }}
         state: present
       become: true
 
-    - name: Remove conflicting cracklib-packer symlink
+    - name: (RedHat) Remove conflicting cracklib-packer symlink
       ansible.builtin.file:
         path: /usr/sbin/packer
         state: absent
       become: true
+      when: ansible_os_family == "RedHat"
 
     - name: Add current user to libvirt group
       ansible.builtin.user:
-        name: "{{ansible_user_id}}"
+        name: "{{current_user}}"
         groups: libvirt
         append: yes
       become: true
