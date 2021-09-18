@@ -1,0 +1,10 @@
+# site.yml
+---
+- hosts: all
+  become: true
+  roles:
+    - role: infranetic.setup
+      tags: [setup]
+
+    - role: infranetic.hashistack
+      tags: [hashistack]

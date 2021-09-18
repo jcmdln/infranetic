@@ -1,20 +1,17 @@
 # setup-localhost.yml
 ---
-- name: Setup localhost for building Infranetic
-  hosts: localhost
-
+- hosts: localhost
   vars:
     ansible_connection: local
-    current_user: "{{ansible_user_id}}"
-
+    current_user: "{{ ansible_user_id }}"
   tasks:
-    - name: Add package management dependencies
-       ansible.builtin.package:
-         name: >-
-           {{ "python3-dnf" if ansible_os_family == "RedHat"
-           else "python3-apt" }}
-         state: present
-       become: true
+    - name: Add Ansible dependencies
+      ansible.builtin.package:
+        name: >-
+          {{ "python3-dnf" if ansible_os_family == "RedHat"
+          else "python3-apt" }}
+        state: present
+      become: true
 
     - name: (Debian) Add official HashiCorp GPG key
       ansible.builtin.apt_key:
@@ -26,7 +23,7 @@
     - name: (Debian) Add official HashiCorp repository
       ansible.builtin.apt_repository:
         repo: >-
-          deb [arch=amd64] https://apt.releases.hashicorp.com {{target}} main
+          deb [arch=amd64] https://apt.releases.hashicorp.com {{ target }} main
         filename: hashicorp
         install_python_apt: false
         state: present
@@ -57,6 +54,7 @@
       ansible.builtin.package:
         name:
           - packer
+          - qemu-kvm
           - terraform
           - vagrant-hostmanager
           - vagrant-libvirt
@@ -65,10 +63,7 @@
             else "libvirt-client" }}
           - >-
             {{ "libvirt-daemon-system" if ansible_os_family == "Debian"
-            else omit }}
-          - >-
-            {{ "qemu-kvm" if ansible_os_family == "Debian"
-            else omit }}
+            else "libvirt-daemon" }}
         state: present
       become: true
 
@@ -81,7 +76,7 @@
 
     - name: Add current user to libvirt group
       ansible.builtin.user:
-        name: "{{current_user}}"
+        name: "{{ current_user }}"
         groups: libvirt
         append: yes
       become: true
@@ -90,8 +85,8 @@
       ansible.builtin.blockinfile:
         path: /etc/sudoers.d/vagrant-hostmanager
         block: >-
-          {{current_user}} ALL=(root) NOPASSWD: /bin/cp
-          /home/{{current_user}}/.vagrant.d/tmp/hosts.local /etc/hosts
+          {{ current_user }} ALL=(root) NOPASSWD: /bin/cp
+          /home/{{ current_user }}/.vagrant.d/tmp/hosts.local /etc/hosts
         create: true
         owner: root
         group: root

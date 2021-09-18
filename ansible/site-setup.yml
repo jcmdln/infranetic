@@ -1,7 +1,0 @@
-# site-setup.yml
----
-- name: Setup HashiStack servers
-  become: true
-  hosts: default
-  roles:
-    - role: infranetic.setup

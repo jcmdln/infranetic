@@ -1,0 +1,7 @@
+# requirements.yml
+---
+collections:
+  - ansible.posix
+  - ansible.utils
+  - community.crypto
+roles: []

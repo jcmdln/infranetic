@@ -1,9 +1,0 @@
-# site-hashistack.yml
----
-- name: Setup HashiStack servers
-  become: true
-  hosts: servers
-  roles:
-    - role: infranetic.hashistack
-
-# - name: Setup HashiStack clients

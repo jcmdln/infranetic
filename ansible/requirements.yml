@@ -1,6 +1,0 @@
----
-roles: []
-collections:
-  - ansible.posix
-  - ansible.utils
-  - community.crypto

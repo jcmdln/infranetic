@@ -1,12 +1,9 @@
 # setup-vagrant.yml
 ---
-- name: Build infranetic vagrant box
-  hosts: localhost
-
+- hosts: localhost
   vars:
     ansible_connection: local
-    current_user: "{{ansible_user_id}}"
-
+    current_user: "{{ ansible_user_id }}"
   tasks:
     - name: Destroy initialized infranetic boxes
       ansible.builtin.raw: >-
@@ -33,19 +30,12 @@
 
     - name: Remove vagrant boxes from known hosts
       ansible.builtin.raw: >-
-        ssh-keygen -R {{item}}
+        ssh-keygen -R infranetic-mgmt{{ item }}
       changed_when: result.rc == 0
       failed_when: false
-      loop:
-        - local-server-1
-        - local-server-2
-        - local-server-3
+      loop: [1, 2, 3]
       register: result
-
-    - name: Build new infranetic image
-      ansible.builtin.raw: >-
-        packer build -force infranetic.pkr.hcl
 
     - name: Add infranetic image as vagrant box
       ansible.builtin.raw: >-
-        vagrant box add --name infranetic ./build/infranetic-*.box
+        vagrant box add --name infranetic/fedora-34 ./build/infranetic-*.box

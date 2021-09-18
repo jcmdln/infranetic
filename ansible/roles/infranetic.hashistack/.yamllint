@@ -1,9 +1,0 @@
----
-extends: default
-
-rules:
-  comments: disable
-  comments-indentation: enable
-  document-start: enable
-  truthy:
-    allowed-values: ['true', 'false']

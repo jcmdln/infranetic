@@ -1,0 +1,55 @@
+# infranetic.hashistack/tasks/vault.yml
+---
+- name: (Vault) Add hashicorp-vault-stable repository
+  ansible.builtin.yum_repository:
+    name: vault
+    state: present
+    enabled: true
+    baseurl: >-
+      https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
+    description: hashicorp-vault-stable
+    file: hashicorp-vault-stable
+    gpgcheck: true
+    gpgkey: https://rpm.releases.hashicorp.com/gpg
+    include: vault
+
+- name: (Vault) Add user 'vault'
+  ansible.builtin.user:
+    name: vault
+    state: present
+
+- name: (Vault) Add packages
+  ansible.builtin.package:
+    name: "{{ vault_packages }}"
+    state: present
+
+- name: (Vault) Create directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: vault
+    group: vault
+    mode: "{{ item.mode }}"
+  loop:
+    - path: /etc/vault.d
+      mode: "0750"
+    - path: /opt/vault
+      mode: "0750"
+    - path: /opt/vault/data
+      mode: "0750"
+    - path: /opt/vault/tls
+      mode: "0700"
+
+- name: (Vault) Configure vault
+  ansible.builtin.template:
+    src: vault.hcl
+    dest: /etc/vault.d/vault.hcl
+    owner: vault
+    group: vault
+    mode: "0640"
+
+- name: (Vault) Start vault.service
+  ansible.builtin.systemd:
+    name: vault.service
+    state: started
+    enabled: true

@@ -1,0 +1,38 @@
+# infranetic.hashistack/tasks/consul.yml
+---
+- name: (Consul) Add hashicorp-consul-stable repository
+  ansible.builtin.yum_repository:
+    name: consul
+    state: present
+    enabled: true
+    baseurl: >-
+      https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
+    description: hashicorp-consul-stable
+    file: hashicorp-consul-stable
+    gpgcheck: true
+    gpgkey: https://rpm.releases.hashicorp.com/gpg
+    include: consul
+
+- name: (Consul) Add packages
+  ansible.builtin.package:
+    name: "{{ consul_packages }}"
+    state: present
+
+- name: (Consul) Add user 'consul'
+  ansible.builtin.user:
+    name: consul
+    state: present
+
+- name: (Consul) Configure consul
+  ansible.builtin.template:
+    src: consul.hcl
+    dest: /etc/consul.d/consul.hcl
+    owner: consul
+    group: consul
+    mode: "0640"
+
+- name: (Consul) Start consul.service
+  ansible.builtin.systemd:
+    name: consul.service
+    state: started
+    enabled: true

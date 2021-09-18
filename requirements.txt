@@ -1,0 +1,3 @@
+# requirements.txt
+
+ansible-core==2.11.5

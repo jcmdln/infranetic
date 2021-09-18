@@ -1,5 +1,0 @@
-# hashistack/tasks/main.yml
----
-- include_tasks: vault.yml
-- include_tasks: consul.yml
-- include_tasks: nomad.yml
