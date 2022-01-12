@@ -1,41 +1,101 @@
 # SPDX-License-Identifier: ISC
 ---
 - hosts: localhost
+
   vars:
     ansible_connection: local
     current_user: "{{ ansible_user_id }}"
+
   tasks:
-    - name: Destroy initialized infranetic boxes
-      ansible.builtin.raw: >-
-        vagrant destroy -f
-      changed_when: result.rc == 0
-      failed_when: false
-      register: result
+    - name: Add Ansible dependencies
+      ansible.builtin.package:
+        name: >-
+          {{ "python3-dnf" if ansible_os_family == "RedHat"
+          else "python3-apt" }}
+        state: present
+      become: true
 
-    - name: Remove infranetic vagrant boxes
-      ansible.builtin.raw: >-
-        vagrant box remove infranetic
-      changed_when: result.rc == 0
-      failed_when: false
-      register: result
+    - name: (Debian) Add official HashiCorp GPG key
+      ansible.builtin.apt_key:
+        url: https://apt.releases.hashicorp.com/gpg
+        state: present
+      become: true
+      when: ansible_os_family|lower == "debian"
 
-    - name: Remove infranetic libvirt volumes
-      ansible.builtin.raw: >-
-        virsh vol-list --pool default |
-        awk '/infranetic/ {print $1}' |
-        xargs virsh vol-delete --pool default --vol
-      changed_when: result.rc == 0
-      failed_when: false
-      register: result
+    - name: (Debian) Add official HashiCorp repository
+      ansible.builtin.apt_repository:
+        repo: >-
+          deb [arch=amd64] https://apt.releases.hashicorp.com {{ target }} main
+        filename: hashicorp
+        install_python_apt: false
+        state: present
+      vars:
+        target: "{{ lookup('pipe', 'lsb_release -cs') }}"
+      become: true
+      when: ansible_os_family|lower == "debian"
 
-    - name: Remove vagrant boxes from known hosts
-      ansible.builtin.raw: >-
-        ssh-keygen -R infranetic-mgmt{{ item }}
-      changed_when: result.rc == 0
-      failed_when: false
-      loop: [1, 2, 3]
-      register: result
+    - name: (RedHat) Add official HashiCorp repository
+      ansible.builtin.yum_repository:
+        baseurl: >-
+          https://rpm.releases.hashicorp.com/{{-
+          "fedora" if ansible_distribution|lower == "fedora"
+          else "RHEL"
+          -}}/$releasever/$basearch/stable
+        description: hashicorp
+        enabled: true
+        exclude: vagrant*
+        file: hashicorp
+        gpgcheck: true
+        gpgkey: https://rpm.releases.hashicorp.com/gpg
+        name: hashicorp
+        state: present
+      become: true
+      when: ansible_os_family|lower == "redhat"
 
-    - name: Add infranetic image as vagrant box
-      ansible.builtin.raw: >-
-        vagrant box add --name infranetic/fedora-34 ./build/infranetic-*.box
+    - name: Add required packages
+      ansible.builtin.package:
+        name: "{{ pkgs_common | union(pkgs_target) }}"
+        state: present
+      become: true
+      vars:
+        pkgs_common:
+          - packer
+          - qemu-kvm
+          - terraform
+          - vagrant-hostmanager
+          - vagrant-libvirt
+        pkgs_deb:
+          - libvirt-clients
+          - libvirt-daemon-system
+        pkgs_rpm:
+          - libvirt-client
+          - libvirt-daemon
+        pkgs_target: >-
+          {{ pkgs_rpm if ansible_os_family|lower == "redhat"
+          else pkgs_deb }}
+
+    - name: (RedHat) Remove conflicting cracklib-packer symlink
+      ansible.builtin.file:
+        path: /usr/sbin/packer
+        state: absent
+      become: true
+      when: ansible_os_family == "RedHat"
+
+    - name: Add current user to libvirt group
+      ansible.builtin.user:
+        name: "{{ current_user }}"
+        groups: libvirt
+        append: yes
+      become: true
+
+    - name: Allow user to run 'vagrant hostmanager'
+      ansible.builtin.blockinfile:
+        path: /etc/sudoers.d/vagrant-hostmanager
+        block: >-
+          {{ current_user }} ALL=(root) NOPASSWD: /bin/cp
+          /home/{{ current_user }}/.vagrant.d/tmp/hosts.local /etc/hosts
+        create: true
+        owner: root
+        group: root
+        mode: 440
+      become: true
