@@ -12,6 +12,10 @@
 mgmt:
   hosts:
     infranetic-mgmt[1:3]:
-      ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
-      ansible_ssh_pass: infranetic
-      ansible_user: infranetic
+  vars:
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    ansible_ssh_pass: infranetic
+    ansible_ssh_private_key_file: >-
+      {{ lookup('env','PWD') }}/.vagrant/machines/{{-
+      inventory_hostname -}}/libvirt/private_key
+    ansible_user: infranetic
