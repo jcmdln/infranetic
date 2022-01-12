@@ -2,7 +2,7 @@
 
 variable "name" {
     type = string
-    default = "infranetic-fedora"
+    default = "fedora"
 }
 
 variable "os_arch" {
@@ -17,7 +17,7 @@ variable "os_mirror" {
 
 variable "os_version" {
     type = number
-    default = 34
+    default = 35
 }
 
 variable "os_version_minor" {
@@ -28,16 +28,6 @@ variable "os_version_minor" {
 variable "userpass" {
     type = string
     default = "infranetic"
-}
-
-variable "vagrantpub" {
-    type = string
-    default = "https://raw.githubusercontent.com/hashicorp/vagrant/main/keys/vagrant.pub"
-}
-
-locals {
-    imagename  = "${var.name}-${var.os_version}-${var.os_version_minor}-${var.os_arch}"
-    timestamp  = formatdate("YYYYMMDD'T'hhmmssZZZZ", timestamp())
 }
 
 source "qemu" "infranetic" {
@@ -59,14 +49,14 @@ source "qemu" "infranetic" {
     iso_url = "${var.os_mirror}/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-netinst-${var.os_arch}-${var.os_version}-${var.os_version_minor}.iso"
     memory = 2048
     net_device = "virtio-net"
-    output_directory = "./build"
+    output_directory = "./build/${var.os_version}/${var.os_arch}"
     qemuargs = [["-bios", "/usr/share/edk2/ovmf/OVMF_CODE.fd"]]
     shutdown_command = "echo ${var.userpass} | sudo -S poweroff"
     ssh_agent_auth = false
     ssh_password = "${var.userpass}"
     ssh_timeout = "15m"
     ssh_username = "${var.userpass}"
-    vm_name = "${local.imagename}-${local.timestamp}.qcow2"
+    vm_name = "${var.name}.qcow2"
 }
 
 build {
@@ -96,11 +86,21 @@ build {
         inline = ["rm -rf ~/~*"]
     }
 
+    # Generate Vagrant manifest.json
+    provisioner "shell-local" {
+        environment_vars = [
+            "BOX_ARCH=${var.os_arch}",
+            "BOX_ROOT=${path.root}",
+            "BOX_VERSION=${var.os_version}"
+        ]
+        script = "./tools/vagrant-manifest.sh"
+    }
+
     # Package the image as a Vagrant box
     post-processor "vagrant" {
         compression_level = 9
         keep_input_artifact = true
-        output = "./build/${local.imagename}-${local.timestamp}.box"
+        output = "./build/${var.os_version}/${var.os_arch}/${var.name}.box"
         provider_override = "libvirt"
     }
 }
