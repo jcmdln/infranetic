@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: ISC
+
+tox         >=3.24.5
+yamllint    >=1.26.3
