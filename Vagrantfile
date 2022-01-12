@@ -6,7 +6,7 @@ ENV["VAGRANT_NO_PARALLEL"] = "yes"
 Vagrant.configure("2") do |config|
   config.vagrant.plugins = ["vagrant-hostmanager", "vagrant-libvirt"]
 
-  config.vm.box = "infranetic/fedora-34"
+  config.vm.box = "infranetic/fedora"
   config.ssh.password = "infranetic"
   config.ssh.username = "infranetic"
   config.ssh.verify_host_key = false

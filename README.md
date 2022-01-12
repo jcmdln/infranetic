@@ -5,8 +5,8 @@ WARNING. DO NOT ATTEMPT TO USE THIS REPOSITORY UNTIL THIS NOTICE HAS BEEN
 REMOVED OR REPLACED WITH FRIENDLIER WORDING.
 
 `Infranetic` is a brutalized portmanteau derived from the idea of "non-frenetic
-infrastructure" that aims to provide reproducible deployments of "HashiStack"
-that can be deployed locally or globally. This idea was inspired in part by the
+infrastructure" that aims to provide provider-agnostic deployments that can be
+reproduced locally and deployed globally. This idea was inspired in part by the
 following:
 
 * [Ansible and HashiCorp: Better Together (hashicorp.com)](
@@ -33,7 +33,7 @@ $ virtualenv .venv
 $ source .venv/bin/activate
 (.venv) $ pip install -r requirements.txt
 (.venv) $ ansible-galaxy install -r requirements.yml
-(.venv) $ ansible-playbook --ask-become-pass setup-localhost.yml
+(.venv) $ ansible-playbook --ask-become-pass setup-vagrant.yml
 (.venv) $ newgrp libvirt
 ```
 
@@ -41,13 +41,25 @@ Building & Deploying
 ----------
 ### Locally via Vagrant
 ```sh
-(.venv) $ packer build fedora-34.pkr.hcl
-(.venv) $ ansible-playbook setup-vagrant.yml
+(.venv) $ packer build -var="os_version=35" fedora.pkr.hcl
+(.venv) $ vagrant box add build/35/x86_64/manifest.json
 (.venv) $ vagrant up
 (.venv) $ ansible-playbook -i sample.inventory.yml site.yml
 ```
 
 ### (WIP) In the Cloud via Terraform
 ```sh
-(.venv) $ packer build -except "vagrant" fedora-34.pkr.hcl
+(.venv) $ packer build -except="shell-local,vagrant" fedora.pkr.hcl
+(.venv) $ cp sample.inventory.yml inventory.yml
+(.venv) $ ansible-playbook -i inventory.yml site.yml
+```
+
+Testing
+---
+### Rebuilding
+```sh
+vagrant destroy -f &&
+vagrant box remove infranetic/fedora &&
+virsh vol-list --pool default | awk '/infranetic/ {print $1}' |
+    xargs virsh vol-delete --pool default --vol
 ```

@@ -1,0 +1,15 @@
+{
+  "name": "infranetic/fedora",
+  "description": "A Fedora image for github.com/jcmdln/infranetic",
+  "versions": [
+    {
+      "version": "35",
+      "providers": [
+        {
+          "name": "libvirt",
+          "url": "./build/35/x86_64/fedora.box"
+        }
+      ]
+    }
+  ]
+}
