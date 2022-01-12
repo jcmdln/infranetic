@@ -1,4 +1,4 @@
-# sample.inventory.yml
+# SPDX-License-Identifier: ISC
 #
 # This inventory file is an example intended for use with Vagrant, though
 # serves as an example of how this playbook might be used against remote hosts

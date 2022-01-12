@@ -1,4 +1,4 @@
-# requirements.yml
+# SPDX-License-Identifier: ISC
 ---
 collections:
   - ansible.posix

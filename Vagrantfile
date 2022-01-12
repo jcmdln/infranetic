@@ -1,4 +1,4 @@
-# Vagrantfile
+# SPDX-License-Identifier: ISC
 
 ENV["VAGRANT_DEFAULT_PROVIDER"] = "libvirt"
 ENV["VAGRANT_NO_PARALLEL"] = "yes"

@@ -1,4 +1,4 @@
-# setup-vagrant.yml
+# SPDX-License-Identifier: ISC
 ---
 - hosts: localhost
   vars:

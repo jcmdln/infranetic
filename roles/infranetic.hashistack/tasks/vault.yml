@@ -1,4 +1,4 @@
-# infranetic.hashistack/tasks/vault.yml
+# SPDX-License-Identifier: ISC
 ---
 - name: (Vault) Add hashicorp-vault-stable repository
   ansible.builtin.yum_repository:

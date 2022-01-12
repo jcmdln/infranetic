@@ -1,4 +1,4 @@
-# hashistack/tasks/nomad.yml
+# SPDX-License-Identifier: ISC
 ---
 - name: (Nomad) Add hashicorp-nomad-stable repository
   ansible.builtin.yum_repository:

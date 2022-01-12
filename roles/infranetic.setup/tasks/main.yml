@@ -1,4 +1,4 @@
-# infranetic.services/tasks/main.yml
+# SPDX-License-Identifier: ISC
 ---
 - name: Install packages
   ansible.builtin.package:

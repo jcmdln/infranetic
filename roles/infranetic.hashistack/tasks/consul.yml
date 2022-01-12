@@ -1,4 +1,4 @@
-# infranetic.hashistack/tasks/consul.yml
+# SPDX-License-Identifier: ISC
 ---
 - name: (Consul) Add hashicorp-consul-stable repository
   ansible.builtin.yum_repository:

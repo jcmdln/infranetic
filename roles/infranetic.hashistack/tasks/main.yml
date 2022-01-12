@@ -1,4 +1,4 @@
-# hashistack/tasks/main.yml
+# SPDX-License-Identifier: ISC
 ---
 - include_tasks: consul.yml
   tags: [consul]

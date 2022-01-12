@@ -1,4 +1,4 @@
-# site.yml
+# SPDX-License-Identifier: ISC
 ---
 - hosts: all
   become: true

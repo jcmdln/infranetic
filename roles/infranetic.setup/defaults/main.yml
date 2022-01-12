@@ -1,4 +1,4 @@
-# infranetic.setup/defaults/main.yml
+# SPDX-License-Identifier: ISC
 ---
 setup_packages:
   - bash-completion
