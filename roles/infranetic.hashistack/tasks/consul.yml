@@ -1,5 +1,37 @@
 # SPDX-License-Identifier: ISC
 ---
+- name: (Consul) Add system user 'consul'
+  ansible.builtin.user:
+    name: consul
+    state: present
+    home: "/etc/consul.d"
+    shell: /bin/false
+    system: true
+
+- name: (Consul) Create directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: consul
+    group: consul
+    mode: "0700"
+  loop:
+    - path: /etc/consul
+    - path: /etc/consul.d
+    - path: /etc/consul/data
+    - path: /etc/consul/plugins
+
+- name: (Consul) Configure consul
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/consul.d/{{ item }}"
+    owner: consul
+    group: consul
+    mode: "0600"
+  loop:
+    - consul.env
+    - consul.hcl
+
 - name: (Consul) Add hashicorp-consul-stable repository
   ansible.builtin.yum_repository:
     name: consul
@@ -18,20 +50,38 @@
     name: "{{ consul_packages }}"
     state: present
 
-- name: (Consul) Add user 'consul'
-  ansible.builtin.user:
-    name: consul
-    state: present
-
-- name: (Consul) Configure consul
+- name: (Consul) Configure consul.service
   ansible.builtin.template:
-    src: consul.hcl
-    dest: /etc/consul.d/consul.hcl
-    owner: consul
-    group: consul
-    mode: "0640"
+    src: consul.service.j2
+    dest: /usr/lib/systemd/system/consul.service
+    owner: root
+    group: root
+    mode: "0644"
+  register: consul_service_configured
 
-- name: (Consul) Start consul.service
+- name: (Consul) Reload systemd daemons if consul.service changed
+  ansible.builtin.raw: >-
+    systemctl daemon-reload
+  when: consul_service_configured.changed
+
+- name: (Consul) Open required ports
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    state: enabled
+    permanent: yes
+  loop:
+    - 8300/tcp
+    - 8301/tcp
+    - 8301/udp
+    - 8302/tcp
+    - 8302/udp
+    - 8500/tcp
+    - 8600/tcp
+    - 8600/udp
+    - 21000-21255/tcp
+    - 21000-21255/udp
+
+- name: (Consul) Start and enable consul.service
   ansible.builtin.systemd:
     name: consul.service
     state: started

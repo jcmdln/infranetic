@@ -1,13 +1,25 @@
 # SPDX-License-Identifier: ISC
 ---
-- include_tasks: consul.yml
+- include_tasks:
+    file: consul.yml
+    apply:
+      tags: [consul]
   tags: [consul]
 
-- include_tasks: vault.yml
+- include_tasks:
+    file: vault.yml
+    apply:
+      tags: [vault]
   tags: [vault]
 
-- include_tasks: nomad.yml
+- include_tasks:
+    file: nomad.yml
+    apply:
+      tags: [nomad]
   tags: [nomad]
 
-- include_tasks: fabio.yml
+- include_tasks:
+    file: fabio.yml
+    apply:
+      tags: [never, fabio]
   tags: [never, fabio]

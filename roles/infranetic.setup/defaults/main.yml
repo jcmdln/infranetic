@@ -23,6 +23,7 @@ setup_packages:
   - msr-tools
   - pciutils
   - procps-ng
+  - python3-libselinux
   - rsync
   - sed
   - sysstat

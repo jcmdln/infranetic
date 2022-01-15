@@ -7,11 +7,10 @@
 consul_packages:
   - consul
 
-consul_advertise_addr: "127.0.0.1"
-consul_bind_addr: "127.0.0.1"
+consul_advertise_addr: 127.0.0.1
+consul_bind_addr: 127.0.0.1
 consul_bootstrap_expect: "{{ play_hosts|length|int }}"
-consul_client_addr: "127.0.0.1"
-consul_data_dir: "/opt/consul"
+consul_client_addr: 127.0.0.1
 consul_server: true
 consul_ui_config_enabled: true
 
@@ -32,25 +31,25 @@ nomad_packages:
   - qemu
   - unzip
 
-nomad_bind_addr: "0.0.0.0"
-nomad_data_dir: "/opt/nomad/data"
-nomad_plugin_dir: "/opt/nomad/plugins"
+nomad_bind_addr: 127.0.0.1
+nomad_log_level: INFO
 
 nomad_client_enabled: true
-nomad_client_servers: ["127.0.0.1:4646"]
+nomad_client_servers:
+  - 127.0.0.1
 
 nomad_server_enabled: true
 nomad_server_bootstrap_expect: "{{ play_hosts|length|int }}"
 
 nomad_vault_enabled: true
-nomad_vault_create_from_role: "nomad-cluster"
+nomad_vault_create_from_role: nomad-cluster
 nomad_vault_address: "https://{{ vault_listener_address }}"
-nomad_vault_ca_path: "/etc/certs/ca"
-nomad_vault_cert_file: "/var/certs/vault.crt"
-nomad_vault_key_file: "/var/certs/vault.key"
+nomad_vault_ca_path: /etc/certs/ca
+nomad_vault_cert_file: /var/certs/vault.crt
+nomad_vault_key_file: /var/certs/vault.key
 
 nomad_driver_podman_config_volumes_enabled: true
-nomad_driver_podman_config_volumes_selinuxlabel: "z"
+nomad_driver_podman_config_volumes_selinuxlabel: z
 nomad_driver_podman_version: "0.3.0"
 nomad_driver_podman_url_prefix: >-
   https://releases.hashicorp.com/nomad-driver-podman/
@@ -65,20 +64,20 @@ vault_packages:
   - python3-cryptography
   - vault
 
+vault_log_level: INFO
+
 # https://www.vaultproject.io/docs/configuration#cluster_addr
-vault_cluster_address: "127.0.0.1:8201"
+vault_cluster_address: 127.0.0.1:8201
 
 # https://www.vaultproject.io/docs/configuration/listener/tcp#address
-vault_listener_address: "127.0.0.1:8200"
+vault_listener_address: 127.0.0.1:8200
 
 # https://www.vaultproject.io/docs/configuration/storage/consul#address
-vault_storage_address: "127.0.0.1:8500"
-
+vault_storage_address: 127.0.0.1:8500
 # https://www.vaultproject.io/docs/configuration/storage/consul#path
-vault_storage_path: "vault"
+vault_storage_path: vault
 
 # https://www.vaultproject.io/docs/configuration/telemetry#statsite_address
-vault_telemetry_address: "127.0.0.1:8125"
-
+vault_telemetry_address: 127.0.0.1:8125
 # https://www.vaultproject.io/docs/configuration/telemetry#disable_hostname
 vault_telemetry_disable_hostname: true

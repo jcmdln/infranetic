@@ -5,11 +5,15 @@ api_addr = "https://{{ vault_listener_address }}"
 cluster_addr = "https://{{ vault_cluster_address }}"
 ui = false
 
+cache {
+  use_auto_auth_token = false
+}
+
 # https://www.vaultproject.io/docs/configuration/listener
 listener "tcp" {
     address = "{{ vault_listener_address }}"
-    tls_cert_file = "/opt/vault/tls/tls.crt"
-    tls_key_file = "/opt/vault/tls/tls.key"
+    tls_cert_file = "/etc/vault/tls/tls.crt"
+    tls_key_file = "/etc/vault/tls/tls.key"
     tls_min_version = "tls12"
 }
 
@@ -27,6 +31,6 @@ telemetry {
 
 vault {
     address = "https://{{ vault_listener_address }}"
-    client_cert = "/opt/vault/tls/tls.crt"
-    client_key = "/opt/vault/tls/tls.key"
+    client_cert = "/etc/vault/tls/tls.crt"
+    client_key = "/etc/vault/tls/tls.key"
 }
