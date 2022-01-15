@@ -50,6 +50,7 @@ Building & Deploying
 ### (WIP) In the Cloud via Terraform
 ```sh
 (.venv) $ packer build -except="shell-local,vagrant" fedora.pkr.hcl
+...
 (.venv) $ cp sample.inventory.yml inventory.yml
 (.venv) $ ansible-playbook -i inventory.yml site.yml
 ```
