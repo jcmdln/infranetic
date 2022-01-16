@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: ISC
+---
+- ansible.builtin.set_fact:
+    setup_packages: "{{ setup_packages }}"
+
+    dnf_automatic_apply_updates: "{{ dnf_automatic_apply_updates|bool }}"
+    dnf_automatic_emit_via: "{{ dnf_automatic_emit_via }}"
+    dnf_automatic_upgrade_type: "{{ dnf_automatic_upgrade_type }}"

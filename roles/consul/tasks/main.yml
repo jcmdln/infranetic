@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: ISC
 ---
-- name: (Consul) Add system user 'consul'
+- name: Add system user 'consul'
   ansible.builtin.user:
     name: consul
     state: present
@@ -8,7 +8,7 @@
     shell: /bin/false
     system: true
 
-- name: (Consul) Create directories
+- name: Create directories
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
@@ -21,7 +21,7 @@
     - path: /etc/consul/data
     - path: /etc/consul/plugins
 
-- name: (Consul) Configure consul
+- name: Configure consul
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/etc/consul.d/{{ item }}"
@@ -32,7 +32,7 @@
     - consul.env
     - consul.hcl
 
-- name: (Consul) Add hashicorp-consul-stable repository
+- name: Add hashicorp-consul-stable repository
   ansible.builtin.yum_repository:
     name: consul
     state: present
@@ -45,12 +45,12 @@
     gpgkey: https://rpm.releases.hashicorp.com/gpg
     include: consul
 
-- name: (Consul) Add packages
+- name: Add packages
   ansible.builtin.package:
     name: "{{ consul_packages }}"
     state: present
 
-- name: (Consul) Configure consul.service
+- name: Configure consul.service
   ansible.builtin.template:
     src: consul.service.j2
     dest: /usr/lib/systemd/system/consul.service
@@ -59,12 +59,12 @@
     mode: "0644"
   register: consul_service_configured
 
-- name: (Consul) Reload systemd daemons if consul.service changed
+- name: Reload systemd daemons if consul.service changed
   ansible.builtin.raw: >-
     systemctl daemon-reload
   when: consul_service_configured.changed
 
-- name: (Consul) Open required ports
+- name: Open required ports
   ansible.posix.firewalld:
     port: "{{ item }}"
     state: enabled
@@ -81,7 +81,7 @@
     - 21000-21255/tcp
     - 21000-21255/udp
 
-- name: (Consul) Start and enable consul.service
+- name: Start and enable consul.service
   ansible.builtin.systemd:
     name: consul.service
     state: started

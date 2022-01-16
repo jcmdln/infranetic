@@ -2,9 +2,33 @@
 ---
 - hosts: all
   become: true
-  roles:
-    - role: infranetic.setup
-      tags: [setup]
+  tasks:
+    # - ansible.builtin.include_role:
+    #     name: seaweedfs
+    #     apply:
+    #       tags: [seaweedfs]
+    #   tags: [seaweedfs]
 
-    - role: infranetic.hashistack
-      tags: [hashistack]
+    - ansible.builtin.include_role:
+        name: consul
+        apply:
+          tags: [consul]
+      tags: [consul]
+
+    - ansible.builtin.include_role:
+        name: vault
+        apply:
+          tags: [vault]
+      tags: [vault]
+
+    - ansible.builtin.include_role:
+        name: nomad
+        apply:
+          tags: [nomad]
+      tags: [nomad]
+
+    # - ansible.builtin.include_role:
+    #     name: fabio
+    #     apply:
+    #       tags: [fabio]
+    #   tags: [fabio]

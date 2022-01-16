@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: ISC
 ---
-- name: (Nomad) Ensure libvirt group exists
+- name: Ensure libvirt group exists
   ansible.builtin.user:
     name: libvirt
     state: present
 
-- name: (Nomad) Add nomad user
+- name: Add nomad user
   ansible.builtin.user:
     name: nomad
     state: present
@@ -15,7 +15,7 @@
     shell: /bin/false
     system: true
 
-- name: (Nomad) Create directories
+- name: Create directories
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
@@ -28,7 +28,7 @@
     - path: /etc/nomad/data
     - path: /etc/nomad/plugins
 
-- name: (Nomad) Configure nomad
+- name: Configure nomad
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/etc/nomad.d/{{ item }}"
@@ -38,7 +38,7 @@
   loop:
     - nomad.hcl
 
-- name: (Nomad) Add hashicorp-nomad-stable repository
+- name: Add hashicorp-nomad-stable repository
   ansible.builtin.yum_repository:
     name: nomad
     state: present
@@ -51,24 +51,24 @@
     gpgkey: https://rpm.releases.hashicorp.com/gpg
     include: nomad
 
-- name: (Nomad) Add packages
+- name: Add packages
   ansible.builtin.package:
     name: "{{ nomad_packages }}"
     state: present
 
-- name: (Nomad) Start and enable user podman.socket
+- name: Start and enable user podman.socket
   ansible.builtin.systemd:
     name: podman.socket
     state: started
     enabled: true
 
-- name: (Nomad) Download and verify nomad-driver-podman
+- name: Download and verify nomad-driver-podman
   ansible.builtin.get_url:
     url: "{{ nomad_driver_podman_url_prefix }}_linux_amd64.zip"
     dest: /tmp/nomad-driver-podman.zip
     checksum: "sha256:{{ nomad_driver_podman_url_prefix }}_SHA256SUMS"
 
-- name: (Nomad) Unarchive plugins
+- name: Unarchive plugins
   ansible.builtin.unarchive:
     src: "{{ item.src }}"
     dest: /etc/nomad/plugins
@@ -81,7 +81,7 @@
 
 # FIXME: If your operating system's default ephemeral port range overlaps with Nomad's dynamic port range, you should tune the OS to avoid this overlap.
 # - https://www.nomadproject.io/docs/install/production/requirements#ports-used
-- name: (Nomad) Open required ports
+- name: Open required ports
   ansible.posix.firewalld:
     port: "{{ item }}"
     state: enabled
@@ -92,7 +92,7 @@
     - 4648/tcp
     - 4648/udp
 
-- name: (Nomad) Start nomad.service
+- name: Start nomad.service
   ansible.builtin.systemd:
     name: nomad.service
     state: started

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: ISC
 ---
-- name: (Vault) Add system user 'vault'
+- name: Add system user 'vault'
   ansible.builtin.user:
     name: vault
     state: present
@@ -8,7 +8,7 @@
     shell: /bin/false
     system: true
 
-- name: (Vault) Create directories
+- name: Create directories
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
@@ -22,7 +22,7 @@
     - path: /etc/vault/plugins
     - path: /etc/vault/tls
 
-- name: (Vault) Configure vault
+- name: Configure vault
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/etc/vault.d/{{ item }}"
@@ -32,7 +32,7 @@
   loop:
     - vault.hcl
 
-- name: (Vault) Add hashicorp-vault-stable repository
+- name: Add hashicorp-vault-stable repository
   ansible.builtin.yum_repository:
     name: vault
     state: present
@@ -45,12 +45,12 @@
     gpgkey: https://rpm.releases.hashicorp.com/gpg
     include: vault
 
-- name: (Vault) Add packages
+- name: Add packages
   ansible.builtin.package:
     name: "{{ vault_packages }}"
     state: present
 
-- name: (Vault) Start and enable vault.service
+- name: Start and enable vault.service
   ansible.builtin.systemd:
     name: vault.service
     state: started
