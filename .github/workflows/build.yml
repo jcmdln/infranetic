@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: ISC
 ---
-name: build
+name: packer
 
 on:
   pull_request:
@@ -22,12 +22,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
 
       - name: Prepare
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-kvm
+          sudo apt-get install -y ansible ovmf qemu-kvm
+          ansible-galaxy collection install -fr requirements.yml
 
       - name: Init
         run: packer init fedora.pkr.hcl
