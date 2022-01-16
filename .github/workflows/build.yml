@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: ISC
+---
+name: build
+
+on:
+  pull_request:
+    paths:
+      - ".github/**"
+      - "fedora-kickstart.cfg"
+      - "fedora.pkr.hcl"
+  push:
+    paths:
+      - ".github/**"
+      - "fedora-kickstart.cfg"
+      - "fedora.pkr.hcl"
+  workflow_dispatch:
+
+jobs:
+  packer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+
+      - name: Init
+        run: packer init openbsd.pkr.hcl
+
+      - name: Validate
+        run: packer validate -syntax-only openbsd.pkr.hcl
+
+      - name: Build
+        env:
+          PACKER_LOG: 1
+        run: packer build -color=false -on-error=abort openbsd.pkr.hcl

@@ -31,7 +31,6 @@ variable "userpass" {
 }
 
 source "qemu" "infranetic" {
-    accelerator = "kvm"
     boot_command = [
         "e<down><down><end> ",
         "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-kickstart.cfg ",
