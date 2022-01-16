@@ -38,4 +38,9 @@ jobs:
       - name: Build
         env:
           PACKER_LOG: 1
-        run: packer build -color=false -on-error=abort fedora.pkr.hcl
+        run: >-
+          packer build
+          -color=false
+          -on-error=abort
+          -var="efi_bios=/usr/share/ovmf/OVMF.fd"
+          fedora.pkr.hcl
