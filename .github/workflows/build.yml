@@ -25,12 +25,12 @@ jobs:
       - uses: actions/setup-python@v2
 
       - name: Init
-        run: packer init openbsd.pkr.hcl
+        run: packer init fedora.pkr.hcl
 
       - name: Validate
-        run: packer validate -syntax-only openbsd.pkr.hcl
+        run: packer validate -syntax-only fedora.pkr.hcl
 
       - name: Build
         env:
           PACKER_LOG: 1
-        run: packer build -color=false -on-error=abort openbsd.pkr.hcl
+        run: packer build -color=false -on-error=abort fedora.pkr.hcl
