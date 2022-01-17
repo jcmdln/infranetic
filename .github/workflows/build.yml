@@ -28,6 +28,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: apt
+        run: |
+          sudo apt update
+          sudo apt install -y ansible ovmf qemu-kvm
+
       - name: packer init
         run: packer init fedora.pkr.hcl
 
