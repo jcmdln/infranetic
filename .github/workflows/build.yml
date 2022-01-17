@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: ISC
+---
+name: build
+
+on:
+  pull_request:
+    paths:
+      - ".github/**"
+      - "fedora-kickstart.cfg"
+      - "fedora.pkr.hcl"
+  push:
+    paths:
+      - ".github/**"
+      - "fedora-kickstart.cfg"
+      - "fedora.pkr.hcl"
+  workflow_dispatch:
+
+jobs:
+  packer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        os_version:
+          - 34
+          - 35
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: packer init
+        run: packer init fedora.pkr.hcl
+
+      - name: packer validate
+        run: packer validate -syntax-only fedora.pkr.hcl
+
+      - name: packer build
+        env:
+          PACKER_LOG: 1
+        run: >-
+          packer build
+          -color=false
+          -on-error=abort
+          -var="efi_bios=/usr/share/ovmf/OVMF.fd"
+          -var="os_version=${{ matrix.os_version }}"
+          -var="qemu_accelerator=tcg"
+          fedora.pkr.hcl
