@@ -41,8 +41,6 @@ jobs:
         run: packer validate -syntax-only fedora.pkr.hcl
 
       - name: packer build
-        env:
-          PACKER_LOG: 1
         run: >-
           packer build
           -color=false
