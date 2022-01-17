@@ -18,7 +18,7 @@ variable "os_arch" {
 
 variable "os_mirror" {
   type = string
-  default = "https://mirrors.kernel.org/fedora/releases"
+  default = "https://download.fedoraproject.org/pub/fedora/linux/releases"
 }
 
 variable "os_version" {
