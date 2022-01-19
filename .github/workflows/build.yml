@@ -47,6 +47,6 @@ jobs:
           -color=false
           -on-error=abort
           -var="os_version=${{ matrix.os_version }}"
-          -var="qemu_accelerator=tcg"
+          -var="qemu_accelerator=none"
           -var="qemu_bios=/usr/share/ovmf/OVMF.fd"
           fedora.pkr.hcl
