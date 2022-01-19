@@ -5,12 +5,6 @@ variable "name" {
   default = "fedora"
 }
 
-variable "efi_bios" {
-  type = string
-  # Use '/usr/share/ovmf/OVMF.fd' on Ubuntu 20.04
-  default = "/usr/share/OVMF/OVMF_CODE.fd"
-}
-
 variable "os_arch" {
   type = string
   default = "x86_64"
@@ -34,6 +28,12 @@ variable "os_version_minor" {
 variable "qemu_accelerator" {
   type = string
   default = "kvm"
+}
+
+variable "qemu_bios" {
+  type = string
+  # Use '/usr/share/ovmf/OVMF.fd' on Ubuntu 20.04
+  default = "/usr/share/OVMF/OVMF_CODE.fd"
 }
 
 variable "userpass" {
@@ -61,7 +61,7 @@ source "qemu" "infranetic" {
   memory = 2048
   net_device = "virtio-net"
   output_directory = "./build/${var.os_version}/${var.os_arch}"
-  qemuargs = [["-bios", "${var.efi_bios}"]]
+  qemuargs = [["-bios", "${var.qemu_bios}"]]
   shutdown_command = "echo ${var.userpass} | sudo -S poweroff"
   ssh_agent_auth = false
   ssh_password = "${var.userpass}"
