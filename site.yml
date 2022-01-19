@@ -3,6 +3,12 @@
 - hosts: all
   become: true
   tasks:
+    - ansible.builtin.include_role:
+        name: setup
+        apply:
+          tags: [setup]
+      tags: [setup]
+
     # - ansible.builtin.include_role:
     #     name: seaweedfs
     #     apply:
