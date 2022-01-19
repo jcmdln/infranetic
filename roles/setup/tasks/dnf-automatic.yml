@@ -1,5 +1,10 @@
 # SPDX-License-Identifier: ISC
 ---
+- name: (dnf-automatic) Install dnf-automatic
+  ansible.builtin.package:
+    name: dnf-automatic
+    state: present
+
 - name: (dnf-automatic) Set apply_updates to "yes"
   ansible.builtin.lineinfile:
     line: "apply_updates = {{ apply_updates }}"

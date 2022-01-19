@@ -7,3 +7,6 @@
 
 - name: Configure dnf-automatic
   include_tasks: dnf-automatic.yml
+  when:
+    - dnf_automatic_enabled is defined
+    - dnf_automatic_enabled|bool
