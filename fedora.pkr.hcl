@@ -36,6 +36,11 @@ variable "qemu_bios" {
   default = "/usr/share/OVMF/OVMF_CODE.fd"
 }
 
+variable "qemu_cpu" {
+  type = string
+  default = "max"
+}
+
 variable "userpass" {
   type = string
   default = "infranetic"
@@ -61,7 +66,10 @@ source "qemu" "infranetic" {
   memory = 2048
   net_device = "virtio-net"
   output_directory = "./build/${var.os_version}/${var.os_arch}"
-  qemuargs = [["-bios", "${var.qemu_bios}"]]
+  qemuargs = [
+    ["-bios", "${var.qemu_bios}"],
+    ["-cpu", "${var.qemu_cpu}"],
+  ]
   shutdown_command = "echo ${var.userpass} | sudo -S poweroff"
   ssh_agent_auth = false
   ssh_password = "${var.userpass}"
