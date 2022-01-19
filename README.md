@@ -29,38 +29,24 @@ minutes on commodity hardware.
 Preparing
 ----------
 ```sh
-$ virtualenv .venv
-$ source .venv/bin/activate
-(.venv) $ pip install -r requirements.txt
-(.venv) $ ansible-galaxy install -r requirements.yml
-(.venv) $ ansible-playbook --ask-become-pass setup-vagrant.yml
-(.venv) $ newgrp libvirt
+$ sudo dnf install ansible
+$ ansible-galaxy collection install -r requirements.yml
+$ ansible-playbook --ask-become-pass setup-vagrant.yml
+$ newgrp libvirt
 ```
 
-Building & Deploying
+Building
 ----------
 ### Locally via Vagrant
 ```sh
-(.venv) $ packer build -var="os_version=35" fedora.pkr.hcl
-(.venv) $ vagrant box add build/35/x86_64/manifest.json
-(.venv) $ vagrant up
-(.venv) $ ansible-playbook -i sample.inventory.yml site.yml
+$ packer build -var="os_version=35" fedora.pkr.hcl
+$ vagrant box add build/35/x86_64/manifest.json
 ```
 
-### (WIP) In the Cloud via Terraform
-```sh
-(.venv) $ packer build -except="shell-local,vagrant" fedora.pkr.hcl
-...
-(.venv) $ cp sample.inventory.yml inventory.yml
-(.venv) $ ansible-playbook -i inventory.yml site.yml
+Deploying
+----------
+### Locally with Vagrant
 ```
-
-Testing
----
-### Rebuilding
-```sh
-vagrant destroy -f &&
-vagrant box remove infranetic/fedora &&
-virsh vol-list --pool default | awk '/infranetic/ {print $1}' |
-    xargs virsh vol-delete --pool default --vol
+$ vagrant up
+$ ansible-playbook -i sample.inventory.yml site.yml
 ```
