@@ -79,13 +79,14 @@
   loop:
     - src: /tmp/nomad-driver-podman.zip
 
-# FIXME: If your operating system's default ephemeral port range overlaps with Nomad's dynamic port range, you should tune the OS to avoid this overlap.
+# FIXME: If your operating system's default ephemeral port range overlaps with
+# Nomad's dynamic port range, you should tune the OS to avoid this overlap.
 # - https://www.nomadproject.io/docs/install/production/requirements#ports-used
 - name: Open required ports
   ansible.posix.firewalld:
     port: "{{ item }}"
     state: enabled
-    permanent: yes
+    permanent: true
   loop:
     - 4646/tcp
     - 4647/tcp

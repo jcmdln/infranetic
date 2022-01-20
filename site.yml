@@ -3,38 +3,44 @@
 - hosts: all
   become: true
   tasks:
-    - ansible.builtin.include_role:
+    - name: Import setup role
+      ansible.builtin.include_role:
         name: setup
         apply:
           tags: [setup]
       tags: [setup]
 
-    # - ansible.builtin.include_role:
-    #     name: seaweedfs
-    #     apply:
-    #       tags: [seaweedfs]
-    #   tags: [seaweedfs]
+    - name: Import seaweedfs role
+      ansible.builtin.include_role:
+        name: seaweedfs
+        apply:
+          tags: [seaweedfs]
+      tags: [never, seaweedfs]
 
-    - ansible.builtin.include_role:
+    - name: Import consul role
+      ansible.builtin.include_role:
         name: consul
         apply:
           tags: [consul]
       tags: [consul]
 
-    - ansible.builtin.include_role:
+    - name: Import vault role
+      ansible.builtin.include_role:
         name: vault
         apply:
           tags: [vault]
       tags: [vault]
 
-    - ansible.builtin.include_role:
+    - name: Import nomad role
+      ansible.builtin.include_role:
         name: nomad
         apply:
           tags: [nomad]
       tags: [nomad]
 
-    # - ansible.builtin.include_role:
-    #     name: fabio
-    #     apply:
-    #       tags: [fabio]
-    #   tags: [fabio]
+    - name: Import fabio role
+      ansible.builtin.include_role:
+        name: fabio
+        apply:
+          tags: [fabio]
+      tags: [never, fabio]

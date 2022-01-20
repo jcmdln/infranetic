@@ -85,7 +85,7 @@
       ansible.builtin.user:
         name: "{{ current_user }}"
         groups: libvirt
-        append: yes
+        append: true
       become: true
 
     - name: Allow user to run 'vagrant hostmanager'

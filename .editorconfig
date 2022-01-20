@@ -2,7 +2,6 @@
 
 root = true
 
-
 [*]
 charset = utf-8
 end_of_line = lf
@@ -20,6 +19,6 @@ tab_width = 2
 indent_size = 2
 tab_width = 2
 
-[*.y{,a}ml{,.j2}]
+[*.y{,a}ml{,lint,.j2}]
 indent_size = 2
 tab_width = 2
