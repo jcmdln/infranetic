@@ -85,7 +85,7 @@ source "qemu" "infranetic" {
   shutdown_command = "echo ${var.userpass} | sudo -S poweroff"
   ssh_agent_auth = false
   ssh_password = "${var.userpass}"
-  ssh_timeout = "1h"
+  ssh_timeout = "${var.qemu_ssh_timeout}"
   ssh_username = "${var.userpass}"
   vm_name = "${var.name}.qcow2"
 }
