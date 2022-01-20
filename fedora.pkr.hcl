@@ -57,6 +57,7 @@ variable "userpass" {
 }
 
 source "qemu" "infranetic" {
+  accelerator = "${var.qemu_accel}"
   boot_command = [
       "e<down><down><end> ",
       "inst.text ",
