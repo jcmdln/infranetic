@@ -96,7 +96,7 @@ build {
   provisioner "ansible" {
     ansible_env_vars = [
       "ANSIBLE_ANY_ERRORS_FATAL=True",
-      "ANSIBLE_CALLBACK_WHITELIST=profile_roles,timer",
+      "ANSIBLE_CALLBACK_WHITELIST=profile_roles",
       "ANSIBLE_COMMAND_WARNINGS=False",
       "ANSIBLE_DIFF_ALWAYS=True",
       "ANSIBLE_GATHER_SUBSET=hardware,min,network,virtual",
