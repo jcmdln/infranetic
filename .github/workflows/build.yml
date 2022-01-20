@@ -23,9 +23,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os_arch:
-          - aarch64
-          - x86_64
         os_version:
           - 34
           - 35
@@ -49,10 +46,9 @@ jobs:
           -color=false
           -except="manifest,shell,shell-local,vagrant"
           -on-error=abort
-          -var="os_arch=${{ matrix.os_arch }}"
           -var="os_version=${{ matrix.os_version }}"
           -var="qemu_accel=tcg"
           -var="qemu_bios=/usr/share/ovmf/OVMF.fd"
-          -var="qemu_cpu=max"
+          -var="qemu_cpu=qemu64"
           -var="qemu_ssh_timeout=2h"
           fedora.pkr.hcl
