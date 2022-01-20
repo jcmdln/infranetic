@@ -18,15 +18,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  packer:
+  fedora:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        os_arch:
+          - aarch64
+          - x86_64
         os_version:
           - 34
           - 35
-
     steps:
       - uses: actions/checkout@v2
 
@@ -45,8 +47,12 @@ jobs:
         run: >-
           packer build
           -color=false
+          -except="manifest,shell,shell-local,vagrant"
           -on-error=abort
           -var="os_version=${{ matrix.os_version }}"
-          -var="qemu_accelerator=none"
+          -var="qemu_accel=tcg"
+          -var="qemu_arch=${{ matrix.os_arch }}"
           -var="qemu_bios=/usr/share/ovmf/OVMF.fd"
+          -var="qemu_cpu=max"
+          -var="qemu_ssh_timeout=2h"
           fedora.pkr.hcl

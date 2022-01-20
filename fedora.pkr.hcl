@@ -25,7 +25,7 @@ variable "os_version_minor" {
   default = 1.2
 }
 
-variable "qemu_accelerator" {
+variable "qemu_accel" {
   type = string
   default = "kvm"
 }
@@ -38,7 +38,17 @@ variable "qemu_bios" {
 
 variable "qemu_cpu" {
   type = string
-  default = "max"
+  default = "host"
+}
+
+variable "qemu_machine" {
+  type = string
+  default = "q35"
+}
+
+variable "qemu_ssh_timeout" {
+  type = string
+  default = "15m"
 }
 
 variable "userpass" {
@@ -47,9 +57,9 @@ variable "userpass" {
 }
 
 source "qemu" "infranetic" {
-  accelerator = "${var.qemu_accelerator}"
   boot_command = [
       "e<down><down><end> ",
+      "inst.text ",
       "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/fedora-kickstart.cfg ",
       "<leftCtrlOn>x<leftCtrlOff>"
   ]
@@ -67,8 +77,10 @@ source "qemu" "infranetic" {
   net_device = "virtio-net"
   output_directory = "./build/${var.os_version}/${var.os_arch}"
   qemuargs = [
+    ["-accel", "${var.qemu_accel}"],
     ["-bios", "${var.qemu_bios}"],
     ["-cpu", "${var.qemu_cpu}"],
+    ["-machine", "${var.qemu_machine}"],
   ]
   shutdown_command = "echo ${var.userpass} | sudo -S poweroff"
   ssh_agent_auth = false
