@@ -58,5 +58,8 @@ jobs:
           key: cache-tox-${{ matrix.name }}-${{ hashFiles('requirements/*.txt', 'tox.ini') }}
           path: .tox/${{ matrix.name }}
 
+      - name: Install Tox
+        run: pip install -r requirements/tox.txt
+
       - name: Run ${{ matrix.name }}
         run: tox -e ${{ matrix.name }}
