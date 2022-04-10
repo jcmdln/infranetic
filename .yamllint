@@ -22,9 +22,10 @@ rules:
     level: warning
   comments-indentation:
     level: warning
-  document-end: disable
+  document-end:
+    present: false
   document-start:
-    level: warning
+    present: false
   empty-lines: enable
   empty-values: disable
   hyphens: enable
