@@ -55,12 +55,7 @@ jobs:
       - uses: actions/cache@v3
         id: cache-tox-${{ matrix.name }}
         with:
-          key: >-
-            cache-tox-${{ matrix.name }}-${{ hashFiles(
-              'requirements/${{ matrix.name }}.txt',
-              'requirements/tox.txt',
-              'tox.ini',
-            ) }}
+          key: cache-tox-${{ matrix.name }}-${{ hashFiles('requirements/*.txt', 'tox.ini') }}
           path: .tox/${{ matrix.name }}
 
       - name: Run ${{ matrix.name }}
