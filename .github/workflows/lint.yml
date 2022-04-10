@@ -53,7 +53,7 @@ jobs:
             tox.ini
 
       - uses: actions/cache@v3
-        id: cache-tox-${{ matrix.name }}
+        id: cache-tox
         with:
           key: cache-tox-${{ matrix.name }}-${{ hashFiles('requirements/*.txt', 'tox.ini') }}
           path: .tox/${{ matrix.name }}
