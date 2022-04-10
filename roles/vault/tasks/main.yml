@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
----
+
 - name: Add system user 'vault'
   ansible.builtin.user:
     name: vault
@@ -21,24 +21,28 @@
     - path: /etc/vault/data
     - path: /etc/vault/plugins
     - path: /etc/vault/tls
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: Configure vault
   ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "/etc/vault.d/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: vault
     group: vault
     mode: "0600"
   loop:
-    - vault.hcl
+    - src: vault.hcl.j2
+      dest: /etc/vault.d/vault.hcl
+  loop_control:
+    label: "{{ item.dest }}"
 
 - name: Add hashicorp-vault-stable repository
   ansible.builtin.yum_repository:
     name: vault
     state: present
     enabled: true
-    baseurl: >-
-      https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
+    baseurl: https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
     description: hashicorp-vault-stable
     file: hashicorp-vault-stable
     gpgcheck: true

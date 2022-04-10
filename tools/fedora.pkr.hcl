@@ -12,7 +12,7 @@ variable "os_arch" {
 
 variable "os_mirror" {
   type = string
-  default = "https://download.fedoraproject.org/pub/fedora/linux/releases"
+  default = "https://mirrors.kernel.org/fedora/releases"
 }
 
 variable "os_version" {
@@ -71,7 +71,7 @@ source "qemu" "infranetic" {
   disk_size = "20G"
   format = "qcow2"
   headless = true
-  http_directory = "./"
+  http_directory = "./tools"
   iso_checksum = "file:${var.os_mirror}/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-${var.os_version}-${var.os_version_minor}-${var.os_arch}-CHECKSUM"
   iso_url = "${var.os_mirror}/${var.os_version}/Everything/${var.os_arch}/iso/Fedora-Everything-netinst-${var.os_arch}-${var.os_version}-${var.os_version_minor}.iso"
   memory = 2048
@@ -122,7 +122,6 @@ build {
   provisioner "shell-local" {
     environment_vars = [
         "BOX_ARCH=${var.os_arch}",
-        "BOX_ROOT=${path.root}",
         "BOX_VERSION=${var.os_version}"
     ]
     script = "./tools/vagrant-manifest.sh"

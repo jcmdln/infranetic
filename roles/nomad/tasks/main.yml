@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
----
+
 - name: Ensure libvirt group exists
   ansible.builtin.user:
     name: libvirt
@@ -27,24 +27,28 @@
     - path: /etc/nomad.d
     - path: /etc/nomad/data
     - path: /etc/nomad/plugins
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: Configure nomad
   ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "/etc/nomad.d/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "/etc/nomad.d/{{ item.dest }}"
     owner: nomad
     group: nomad
     mode: "0600"
   loop:
-    - nomad.hcl
+    - src: nomad.hcl.j2
+      dest: /etc/nomad.d/nomad.hcl
+  loop_control:
+    label: "{{ item.dest }}"
 
 - name: Add hashicorp-nomad-stable repository
   ansible.builtin.yum_repository:
     name: nomad
     state: present
     enabled: true
-    baseurl: >-
-      https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
+    baseurl: https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
     description: hashicorp-nomad-stable
     file: hashicorp-nomad-stable
     gpgcheck: true
@@ -78,20 +82,24 @@
     remote_src: true
   loop:
     - src: /tmp/nomad-driver-podman.zip
+  loop_control:
+    label: "{{ item.src }}"
 
 # FIXME: If your operating system's default ephemeral port range overlaps with
 # Nomad's dynamic port range, you should tune the OS to avoid this overlap.
 # - https://www.nomadproject.io/docs/install/production/requirements#ports-used
 - name: Open required ports
   ansible.posix.firewalld:
-    port: "{{ item }}"
+    port: "{{ item.port }}"
     state: enabled
     permanent: true
   loop:
-    - 4646/tcp
-    - 4647/tcp
-    - 4648/tcp
-    - 4648/udp
+    - port: 4646/tcp
+    - port: 4647/tcp
+    - port: 4648/tcp
+    - port: 4648/udp
+  loop_control:
+    label: "{{ item.port }}"
 
 - name: Start nomad.service
   ansible.builtin.systemd:

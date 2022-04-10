@@ -1,46 +1,40 @@
 # SPDX-License-Identifier: ISC
----
-- hosts: all
-  become: true
+
+- name: Prepare
+  hosts: all
+  tags: [always]
   tasks:
-    - name: Import setup role
-      ansible.builtin.include_role:
-        name: setup
-        apply:
-          tags: [setup]
+    - name: Find all playbook roles
+      ansible.builtin.find:
+        file_type: directory
+        paths: "{{ playbook_dir }}/roles"
+      delegate_to: localhost
+      register: infranetic_roles
+
+    - name: Include defaults from playbook roles
+      ansible.builtin.include_vars: "{{ item.path }}/defaults/main.yml"
+      loop: "{{ infranetic_roles.files }}"
+      loop_control:
+        label: "{{ item.path | basename }}"
+
+- name: Deploy
+  hosts: all
+  become: true
+  roles:
+    - role: setup
       tags: [setup]
 
-    - name: Import seaweedfs role
-      ansible.builtin.include_role:
-        name: seaweedfs
-        apply:
-          tags: [seaweedfs]
+    - role: seaweedfs
       tags: [never, seaweedfs]
 
-    - name: Import consul role
-      ansible.builtin.include_role:
-        name: consul
-        apply:
-          tags: [consul]
+    - role: consul
       tags: [consul]
 
-    - name: Import vault role
-      ansible.builtin.include_role:
-        name: vault
-        apply:
-          tags: [vault]
+    - role: vault
       tags: [vault]
 
-    - name: Import nomad role
-      ansible.builtin.include_role:
-        name: nomad
-        apply:
-          tags: [nomad]
+    - role: nomad
       tags: [nomad]
 
-    - name: Import fabio role
-      ansible.builtin.include_role:
-        name: fabio
-        apply:
-          tags: [fabio]
+    - role: fabio
       tags: [never, fabio]

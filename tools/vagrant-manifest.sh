@@ -6,10 +6,7 @@
 set -eux -o pipefail
 
 [ -n $BOX_ARCH ]    || exit 1
-[ -n $BOX_ROOT ]    || exit 1
 [ -n $BOX_VERSION ] || exit 1
-
-cd "$BOX_ROOT"
 
 BOX_PATH="build/$BOX_VERSION/$BOX_ARCH"
 MANIFEST="$BOX_PATH/manifest.json"
@@ -17,4 +14,4 @@ MANIFEST="$BOX_PATH/manifest.json"
 sed "
     /version\"/ s/[0-9]\+/$BOX_VERSION/;
     /url\"/ s/build.*\"/build\/$BOX_VERSION\/$BOX_ARCH\/fedora.box\"/
-" ./tools/sample.manifest.json > "$BOX_PATH"/manifest.json
+" ./tools/sample.manifest.json > $BOX_PATH/manifest.json

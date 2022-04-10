@@ -1,12 +1,11 @@
 # SPDX-License-Identifier: ISC
----
-- name: Install packages
+
+- name: Update system packages
+  ansible.builtin.package:
+    name: "*"
+    state: latest
+
+- name: Install system packages
   ansible.builtin.package:
     name: "{{ setup_packages }}"
     state: present
-
-- name: Configure dnf-automatic
-  include_tasks: dnf-automatic.yml
-  when:
-    - dnf_automatic_enabled is defined
-    - dnf_automatic_enabled|bool

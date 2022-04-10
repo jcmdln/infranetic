@@ -19,6 +19,10 @@ tab_width = 2
 indent_size = 2
 tab_width = 2
 
-[*.y{,a}ml{,lint,.j2}]
+[*.y{,a}ml{,.j2}]
+indent_size = 2
+tab_width = 2
+
+[*.{yaml,ansible-}lint]
 indent_size = 2
 tab_width = 2

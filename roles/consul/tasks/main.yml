@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
----
+
 - name: Add system user 'consul'
   ansible.builtin.user:
     name: consul
@@ -12,33 +12,38 @@
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
+    recurse: true
     owner: consul
     group: consul
     mode: "0700"
   loop:
-    - path: /etc/consul
     - path: /etc/consul.d
     - path: /etc/consul/data
     - path: /etc/consul/plugins
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: Configure consul
   ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "/etc/consul.d/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: consul
     group: consul
     mode: "0600"
   loop:
-    - consul.env
-    - consul.hcl
+    - src: consul.env.j2
+      dest: /etc/consul.d/consul.env
+    - src: consul.hcl.j2
+      dest: /etc/consul.d/consul.hcl
+  loop_control:
+    label: "{{ item.dest }}"
 
 - name: Add hashicorp-consul-stable repository
   ansible.builtin.yum_repository:
     name: consul
     state: present
     enabled: true
-    baseurl: >-
-      https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
+    baseurl: https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
     description: hashicorp-consul-stable
     file: hashicorp-consul-stable
     gpgcheck: true
@@ -66,20 +71,22 @@
 
 - name: Open required ports
   ansible.posix.firewalld:
-    port: "{{ item }}"
+    port: "{{ item.port }}"
     state: enabled
     permanent: true
   loop:
-    - 8300/tcp
-    - 8301/tcp
-    - 8301/udp
-    - 8302/tcp
-    - 8302/udp
-    - 8500/tcp
-    - 8600/tcp
-    - 8600/udp
-    - 21000-21255/tcp
-    - 21000-21255/udp
+    - port: 8300/tcp
+    - port: 8301/tcp
+    - port: 8301/udp
+    - port: 8302/tcp
+    - port: 8302/udp
+    - port: 8500/tcp
+    - port: 8600/tcp
+    - port: 8600/udp
+    - port: 21000-21255/tcp
+    - port: 21000-21255/udp
+  loop_control:
+    label: "{{ item.port }}"
 
 - name: Start and enable consul.service
   ansible.builtin.systemd:

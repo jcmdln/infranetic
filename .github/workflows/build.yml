@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
----
+
 name: build
 
 on:
