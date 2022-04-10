@@ -1,0 +1,67 @@
+# SPDX-License-Identifier: ISC
+
+name: lint
+
+on:
+  pull_request:
+    paths:
+      - .ansible-lint
+      - .github/workflows/lint.yml
+      - .yamllint
+      - ansible.cfg
+      - requirements/ansible-lint.txt
+      - requirements/tox.txt
+      - requirements/yamllint.txt
+      - roles/**
+      - site.yml
+      - tools/**
+      - tox.ini
+  push:
+    paths:
+      - .ansible-lint
+      - .github/workflows/lint.yml
+      - .yamllint
+      - ansible.cfg
+      - requirements/ansible-lint.txt
+      - requirements/tox.txt
+      - requirements/yamllint.txt
+      - roles/**
+      - site.yml
+      - tools/**
+      - tox.ini
+  workflow_dispatch:
+
+jobs:
+  fedora:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: ansible-lint
+          - name: yamllint
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+          cache: "pip"
+          cache-dependency-path: |
+            requirements/tox.txt
+            tox.ini
+
+      - uses: actions/cache@v3
+        id: cache-tox-${{ matrix.name }}
+        with:
+          key: >-
+            cache-tox-${{ matrix.name }}-${{ hashFiles(
+              'requirements/${{ matrix.name }}.txt',
+              'requirements/tox.txt',
+              'tox.ini',
+            ) }}
+          path: .tox/${{ matrix.name }}
+
+      - name: Run ${{ matrix.name }}
+        run: tox -e ${{ matrix.name }}
