@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
-
+---
 - hosts: localhost
 
   vars:
@@ -9,9 +9,7 @@
   tasks:
     - name: Add Ansible dependencies
       ansible.builtin.package:
-        name: >-
-          {{ "python3-dnf" if ansible_os_family == "RedHat"
-          else "python3-apt" }}
+        name: "{{ 'python3-dnf' if ansible_os_family == 'RedHat' else 'python3-apt' }}"
         state: present
       become: true
 
@@ -24,8 +22,7 @@
 
     - name: (Debian) Add official HashiCorp repository
       ansible.builtin.apt_repository:
-        repo: >-
-          deb [arch=amd64] https://apt.releases.hashicorp.com {{ target }} main
+        repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ target }} main"
         filename: hashicorp
         install_python_apt: false
         state: present
@@ -36,11 +33,7 @@
 
     - name: (RedHat) Add official HashiCorp repository
       ansible.builtin.yum_repository:
-        baseurl: >-
-          https://rpm.releases.hashicorp.com/{{-
-          "fedora" if ansible_distribution|lower == "fedora"
-          else "RHEL"
-          -}}/$releasever/$basearch/stable
+        baseurl: "https://rpm.releases.hashicorp.com/{{ target }}/$releasever/$basearch/stable"
         description: hashicorp
         enabled: true
         exclude: vagrant*
@@ -50,6 +43,8 @@
         name: hashicorp
         state: present
       become: true
+      vars:
+        target: "{{ 'fedora' if ansible_distribution|lower == 'fedora' else 'rhel' }}"
       when: ansible_os_family|lower == "redhat"
 
     - name: Add required packages
@@ -59,7 +54,6 @@
       become: true
       vars:
         pkgs_common:
-          - packer
           - qemu-kvm
           - terraform
           - vagrant-hostmanager
@@ -97,5 +91,5 @@
         create: true
         owner: root
         group: root
-        mode: 440
+        mode: 0440
       become: true

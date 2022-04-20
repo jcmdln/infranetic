@@ -10,11 +10,6 @@ Vagrant.configure("2") do |config|
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = true
 
-  config.vm.box = "infranetic/fedora"
-  config.ssh.password = "infranetic"
-  config.ssh.username = "infranetic"
-  config.ssh.verify_host_key = false
-
   config.nfs.verify_installed = false
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
@@ -26,7 +21,9 @@ Vagrant.configure("2") do |config|
 
   (1..3).each do |i|
     config.vm.define "mgmt#{i}" do |c|
-      c.vm.hostname = "mgmt#{i}.infranetic"
+        c.vm.box = "jcmdln/fedora"
+        c.vm.box_version = "35"
+        c.vm.hostname = "mgmt#{i}.infranetic"
     end
   end
 
