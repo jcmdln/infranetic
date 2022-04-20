@@ -8,6 +8,25 @@
     shell: /bin/false
     system: true
 
+- name: Open required ports
+  ansible.posix.firewalld:
+    port: "{{ item.port }}"
+    state: enabled
+    permanent: true
+  loop:
+    - port: 8300/tcp
+    - port: 8301/tcp
+    - port: 8301/udp
+    - port: 8302/tcp
+    - port: 8302/udp
+    - port: 8500/tcp
+    - port: 8600/tcp
+    - port: 8600/udp
+    - port: 21000-21255/tcp
+    - port: 21000-21255/udp
+  loop_control:
+    label: "{{ item.port }}"
+
 - name: Create directories
   ansible.builtin.file:
     path: "{{ item.path }}"
@@ -68,25 +87,6 @@
   ansible.builtin.raw: >-
     systemctl daemon-reload
   when: consul_service_configured.changed
-
-- name: Open required ports
-  ansible.posix.firewalld:
-    port: "{{ item.port }}"
-    state: enabled
-    permanent: true
-  loop:
-    - port: 8300/tcp
-    - port: 8301/tcp
-    - port: 8301/udp
-    - port: 8302/tcp
-    - port: 8302/udp
-    - port: 8500/tcp
-    - port: 8600/tcp
-    - port: 8600/udp
-    - port: 21000-21255/tcp
-    - port: 21000-21255/udp
-  loop_control:
-    label: "{{ item.port }}"
 
 - name: Start and enable consul.service
   ansible.builtin.systemd:
