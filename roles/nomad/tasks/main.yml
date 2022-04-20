@@ -15,6 +15,22 @@
     shell: /bin/false
     system: true
 
+# FIXME: If your operating system's default ephemeral port range overlaps with
+# Nomad's dynamic port range, you should tune the OS to avoid this overlap.
+# - https://www.nomadproject.io/docs/install/production/requirements#ports-used
+- name: Open required ports
+  ansible.posix.firewalld:
+    port: "{{ item.port }}"
+    state: enabled
+    permanent: true
+  loop:
+    - port: 4646/tcp
+    - port: 4647/tcp
+    - port: 4648/tcp
+    - port: 4648/udp
+  loop_control:
+    label: "{{ item.port }}"
+
 - name: Create directories
   ansible.builtin.file:
     path: "{{ item.path }}"
@@ -87,22 +103,6 @@
     - src: /tmp/nomad-driver-podman.zip
   loop_control:
     label: "{{ item.src }}"
-
-# FIXME: If your operating system's default ephemeral port range overlaps with
-# Nomad's dynamic port range, you should tune the OS to avoid this overlap.
-# - https://www.nomadproject.io/docs/install/production/requirements#ports-used
-- name: Open required ports
-  ansible.posix.firewalld:
-    port: "{{ item.port }}"
-    state: enabled
-    permanent: true
-  loop:
-    - port: 4646/tcp
-    - port: 4647/tcp
-    - port: 4648/tcp
-    - port: 4648/udp
-  loop_control:
-    label: "{{ item.port }}"
 
 - name: Start nomad.service
   ansible.builtin.systemd:

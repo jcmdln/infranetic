@@ -6,9 +6,19 @@ data_dir = "/etc/nomad/data"
 log_level = "{{ nomad_log_level }}"
 plugin_dir = "/etc/nomad/plugins"
 
+advertise {
+  http = "{{ nomad_advertise_http }}"
+  rpc  = "{{ nomad_advertise_rpc }}"
+  serf = "{{ nomad_advertise_serf }}"
+}
+
 client {
   enabled = {{ nomad_client_enabled|lower }}
   servers = {{ nomad_client_servers|to_json }}
+}
+
+consul {
+  address = "{{ nomad_consul_address }}"
 }
 
 server {
@@ -21,9 +31,15 @@ vault {
   create_from_role = "{{ nomad_vault_create_from_role }}"
 
   address = "{{ nomad_vault_address }}"
+  token = ""
+
+{% if nomad_vault_ca_path and nomad_vault_cert_file and nomad_vault_key_file %}
   ca_path = "{{ nomad_vault_ca_path }}"
   cert_file = "{{ nomad_vault_cert_file }}"
   key_file = "{{ nomad_vault_key_file }}"
+{% else %}
+  tls_skip_verify = {{ nomad_vault_tls_skip_verify|lower }}
+{% endif %}
 }
 
 plugin "nomad-driver-podman" {
