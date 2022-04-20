@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
-
+---
 vault_packages:
   - python3-cryptography
   - vault

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
-
+---
 setup_packages:
   - bash-completion
   - python3-libselinux

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
-
+---
 - name: Ensure libvirt group exists
   ansible.builtin.user:
     name: libvirt
@@ -21,7 +21,7 @@
     state: directory
     owner: nomad
     group: nomad
-    mode: "0700"
+    mode: 0750
   loop:
     - path: /etc/nomad
     - path: /etc/nomad.d
@@ -33,10 +33,10 @@
 - name: Configure nomad
   ansible.builtin.template:
     src: "{{ item.src }}"
-    dest: "/etc/nomad.d/{{ item.dest }}"
+    dest: "{{ item.dest }}"
     owner: nomad
     group: nomad
-    mode: "0600"
+    mode: 0640
   loop:
     - src: nomad.hcl.j2
       dest: /etc/nomad.d/nomad.hcl
@@ -73,7 +73,7 @@
     checksum: "sha256:{{ nomad_driver_podman_url_prefix }}_SHA256SUMS"
     owner: nomad
     group: nomad
-    mode: "0700"
+    mode: 0750
 
 - name: Unarchive plugins
   ansible.builtin.unarchive:
@@ -81,7 +81,7 @@
     dest: /etc/nomad/plugins
     owner: nomad
     group: nomad
-    mode: "0700"
+    mode: 0750
     remote_src: true
   loop:
     - src: /tmp/nomad-driver-podman.zip

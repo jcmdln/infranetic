@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
-
+---
 - name: Update system packages
   ansible.builtin.package:
     name: "*"

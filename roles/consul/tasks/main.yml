@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
-
+---
 - name: Add system user 'consul'
   ansible.builtin.user:
     name: consul
@@ -15,7 +15,7 @@
     recurse: true
     owner: consul
     group: consul
-    mode: "0700"
+    mode: 0750
   loop:
     - path: /etc/consul.d
     - path: /etc/consul/data
@@ -29,7 +29,7 @@
     dest: "{{ item.dest }}"
     owner: consul
     group: consul
-    mode: "0600"
+    mode: 0640
   loop:
     - src: consul.env.j2
       dest: /etc/consul.d/consul.env
@@ -59,9 +59,9 @@
   ansible.builtin.template:
     src: consul.service.j2
     dest: /usr/lib/systemd/system/consul.service
-    owner: root
-    group: root
-    mode: "0644"
+    owner: consul
+    group: consul
+    mode: 0640
   register: consul_service_configured
 
 - name: Reload systemd daemons if consul.service changed

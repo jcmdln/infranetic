@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
-
+---
 - name: Add system user 'vault'
   ansible.builtin.user:
     name: vault
@@ -8,13 +8,26 @@
     shell: /bin/false
     system: true
 
+- name: Open required ports
+  ansible.posix.firewalld:
+    port: "{{ item.port }}"
+    state: enabled
+    permanent: true
+  loop:
+    - port: 8125/tcp
+    - port: 8200/tcp
+    - port: 8201/tcp
+    - port: 8500/tcp
+  loop_control:
+    label: "{{ item.port }}"
+
 - name: Create directories
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     owner: vault
     group: vault
-    mode: "0700"
+    mode: 0750
   loop:
     - path: /etc/vault
     - path: /etc/vault.d
@@ -30,7 +43,7 @@
     dest: "{{ item.dest }}"
     owner: vault
     group: vault
-    mode: "0600"
+    mode: 0640
   loop:
     - src: vault.hcl.j2
       dest: /etc/vault.d/vault.hcl

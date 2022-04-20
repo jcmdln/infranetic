@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
-
+---
 nomad_packages:
   - libvirt
   - podman
