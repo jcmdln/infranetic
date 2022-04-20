@@ -30,7 +30,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  fedora:
+  lint:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
