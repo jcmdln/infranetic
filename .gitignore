@@ -11,6 +11,9 @@
 !ansible.cfg
 !LICENSE.md
 !README.md
+!requirements.yml
+!sample.inventory.yml
+!setup-vagrant.yml
 !site.yml
 !tox.ini
 !Vagrantfile
@@ -33,11 +36,3 @@
 !roles/**/*.j2
 !roles/**/*.md
 !roles/**/*.yml
-
-!tools/
-!tools/**/
-!tools/**/*.cfg
-!tools/**/*.hcl
-!tools/**/*.json
-!tools/**/*.sh
-!tools/**/*.yml

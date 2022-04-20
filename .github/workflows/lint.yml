@@ -1,33 +1,31 @@
 # SPDX-License-Identifier: ISC
-
+---
 name: lint
 
 on:
   pull_request:
     paths:
-      - .ansible-lint
       - .github/workflows/lint.yml
+      - requirements/*.txt
+      - roles/**
+      - .ansible-lint
+      - .editorconfig
+      - .gitignore
       - .yamllint
       - ansible.cfg
-      - requirements/ansible-lint.txt
-      - requirements/tox.txt
-      - requirements/yamllint.txt
-      - roles/**
       - site.yml
-      - tools/**
       - tox.ini
   push:
     paths:
-      - .ansible-lint
       - .github/workflows/lint.yml
+      - requirements/*.txt
+      - roles/**
+      - .ansible-lint
+      - .editorconfig
+      - .gitignore
       - .yamllint
       - ansible.cfg
-      - requirements/ansible-lint.txt
-      - requirements/tox.txt
-      - requirements/yamllint.txt
-      - roles/**
       - site.yml
-      - tools/**
       - tox.ini
   workflow_dispatch:
 
@@ -42,7 +40,7 @@ jobs:
           - name: yamllint
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: actions/setup-python@v3
         with:

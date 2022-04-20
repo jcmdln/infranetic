@@ -13,12 +13,36 @@ globally. This idea was inspired in part by the following:
 
 Using
 ---
+### Prepare
 ```sh
+# Setup and activate virtualenv
 $ virtualenv .venv
 $ source .venv/bin/activate
-(.venv) $ pip install -r requirements/ansible.txt -r requirements/tox.txt
-(.venv) $ ansible-galaxy install -r ./tools/requirements.yml
-(.venv) $ ansible-playbook --ask-become-pass ./tools/setup-vagrant.yml
+
+# Install Python dependencies
+(.venv) $ pip install -r requirements/ansible.txt
+
+# Install Ansible dependencies
+(.venv) $ ansible-galaxy install -r requirements.yml
+
+# Setup localhost to run Vagrant
+(.venv) $ ansible-playbook --ask-become-pass setup-vagrant.yml
 (.venv) $ newgrp libvirt
-(.venv) $ tox -e build,deploy
+```
+
+### Verify
+```sh
+(.venv) $ pip install -r requirements/tox.txt
+(.venv) $ tox
+```
+
+### Deploy
+```sh
+# multi-node (Default)
+(.venv) $ vagrant up
+(.venv) $ ansible-playbook -i sample.inventory.yml site.yml
+
+# single-node
+(.venv) $ vagrant up mgmt1
+(.venv) $ ansible-playbook -i sample.inventory.yml -l mgmt1.infranetic site.yml
 ```

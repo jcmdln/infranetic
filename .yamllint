@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
-
+---
 yaml-files:
   - "*.yaml"
   - "*.yml"
@@ -20,12 +20,12 @@ rules:
   commas: enable
   comments:
     level: warning
+    min-spaces-from-content: 1
+    require-starting-space: true
   comments-indentation:
     level: warning
-  document-end:
-    present: false
-  document-start:
-    present: false
+  document-end: disable
+  document-start: enable
   empty-lines: enable
   empty-values: disable
   hyphens: enable

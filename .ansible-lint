@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: ISC
-
+---
 skip_list:
   # Ignore when task used in place of handler
   - no-handler
