@@ -1,36 +1,42 @@
 # {{ template_destpath }}
 # {{ ansible_managed }}
 
-api_addr = "https://{{ vault_listener_address }}"
-cluster_addr = "https://{{ vault_cluster_address }}"
-ui = false
+api_addr = "{{ vault_api_addr }}"
+cluster_addr = "{{ vault_cluster_address }}"
+log_level = "{{ vault_log_level }}"
+ui = {{ vault_ui|lower}}
 
 cache {
   use_auto_auth_token = false
 }
 
-# https://www.vaultproject.io/docs/configuration/listener
 listener "tcp" {
-    address = "{{ vault_listener_address }}"
-    tls_cert_file = "/etc/vault/tls/tls.crt"
-    tls_key_file = "/etc/vault/tls/tls.key"
-    tls_min_version = "tls12"
+  address = "{{ vault_listener_address }}"
+{% if vault_listener_tls_cert_file and vault_listener_tls_key_file %}
+  tls_cert_file = "{{ vault_listener_tls_cert_file }}"
+  tls_key_file = "{{ vault_listener_tls_key_file }}"
+  tls_min_version = "{{ vault_listener_tls_min_version }}"
+{% else %}
+  tls_disable = 1
+{% endif -%}
 }
 
-# https://www.vaultproject.io/docs/configuration/storage
 storage "consul" {
-    address = "{{ vault_storage_address }}"
-    path = "{{ vault_storage_path }}"
+  address = "{{ vault_storage_address }}"
+  path = "{{ vault_storage_path }}"
 }
 
-# https://www.vaultproject.io/docs/configuration/telemetry
+{% if vault_telemetry_statsite_address %}
 telemetry {
-    statsite_address = "{{ vault_telemetry_address }}"
-    disable_hostname = {{ vault_telemetry_disable_hostname|lower }}
+  statsite_address = "{{ vault_telemetry_statsite_address }}"
+  disable_hostname = {{ vault_telemetry_disable_hostname|lower }}
 }
+{% endif -%}
 
 vault {
-    address = "https://{{ vault_listener_address }}"
-    client_cert = "/etc/vault/tls/tls.crt"
-    client_key = "/etc/vault/tls/tls.key"
+  address = "{{ vault_vault_client_address }}"
+{% if vault_vault_client_cert and vault_vault_client_key %}
+  client_cert = "{{ vault_vault_client_cert }}"
+  client_key = "{{ vault_vault_client_key }}"
+{% endif -%}
 }

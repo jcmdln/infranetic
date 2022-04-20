@@ -4,20 +4,22 @@ vault_packages:
   - python3-cryptography
   - vault
 
+vault_api_addr: "http://{{ vault_listener_address }}"
+vault_cluster_address: http://127.0.0.1:8201
 vault_log_level: INFO
+vault_ui: false
 
-# https://www.vaultproject.io/docs/configuration#cluster_addr
-vault_cluster_address: 127.0.0.1:8201
-
-# https://www.vaultproject.io/docs/configuration/listener/tcp#address
 vault_listener_address: 127.0.0.1:8200
+vault_listener_tls_cert_file: null # /etc/vault/tls/tls.crt
+vault_listener_tls_key_file: null # /etc/vault/tls/tls.key
+vault_listener_tls_min_version: tls12
 
-# https://www.vaultproject.io/docs/configuration/storage/consul#address
-vault_storage_address: 127.0.0.1:8500
-# https://www.vaultproject.io/docs/configuration/storage/consul#path
+vault_storage_address: 127.0.0.1:8500/
 vault_storage_path: vault
 
-# https://www.vaultproject.io/docs/configuration/telemetry#statsite_address
-vault_telemetry_address: 127.0.0.1:8125
-# https://www.vaultproject.io/docs/configuration/telemetry#disable_hostname
 vault_telemetry_disable_hostname: true
+vault_telemetry_statsite_address: null # 127.0.0.1:8125
+
+vault_vault_client_address: "{{ vault_listener_address }}"
+vault_vault_client_cert: null # /etc/vault/tls/tls.crt
+vault_vault_client_key: null # /etc/vault/tls/tls.key
