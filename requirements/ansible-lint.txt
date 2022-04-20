@@ -1,3 +1,4 @@
 # SPDX-License-Identifier: ISC
 
 ansible-lint==6.0.2
+-r ./ansible.txt
