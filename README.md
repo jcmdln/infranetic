@@ -2,18 +2,15 @@
 that aims to simplify provider-agnostic deployments that can be reproduced locally and deployed
 globally. This idea was inspired in part by the following:
 
-* [Ansible and HashiCorp: Better Together (hashicorp.com)](
-  https://www.hashicorp.com/resources/ansible-terraform-better-together)
-* [Containers at Facebook by Lindsay Salisbury (youtube.com)](
-  https://www.youtube.com/watch?v=_Qc9jBk18w8)
-* [Mastering Chaos - A Netflix Guide to Microservices (youtube.com)](
-  https://www.youtube.com/watch?v=CZ3wIuvmHeM)
-* [BPF performance analysis at Netflix (youtube.com)](https://www.youtube.com/watch?v=16slh29iN1g)
+-   [Ansible and HashiCorp: Better Together (hashicorp.com)](https://www.hashicorp.com/resources/ansible-terraform-better-together)
+-   [Containers at Facebook by Lindsay Salisbury (youtube.com)](https://www.youtube.com/watch?v=_Qc9jBk18w8)
+-   [Mastering Chaos - A Netflix Guide to Microservices (youtube.com)](https://www.youtube.com/watch?v=CZ3wIuvmHeM)
+-   [BPF performance analysis at Netflix (youtube.com)](https://www.youtube.com/watch?v=16slh29iN1g)
 
+## Using
 
-Using
----
 ### Prepare
+
 ```sh
 # Setup and activate virtualenv
 $ virtualenv .venv
@@ -31,12 +28,14 @@ $ source .venv/bin/activate
 ```
 
 ### Verify
+
 ```sh
 (.venv) $ pip install -r requirements/tox.txt
 (.venv) $ tox
 ```
 
 ### Deploy
+
 ```sh
 # multi-node (Default)
 (.venv) $ vagrant up
