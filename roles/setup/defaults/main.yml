@@ -2,4 +2,9 @@
 ---
 setup_packages:
   - bash-completion
+  - firewalld
+  - NetworkManager
+  - python3-firewall
   - python3-libselinux
+  - systemd-resolved
+  - wireguard-tools

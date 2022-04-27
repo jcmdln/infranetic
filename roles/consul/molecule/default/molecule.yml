@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: ISC
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: podman
+
+platforms:
+  - name: instance
+    image: registry.fedoraproject.org/fedora:35
+    command: /sbin/init
+    pre_build_image: false
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /tmp
+
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      callback_enabled: timer
+      stdout_callback: community.general.yaml
+    diff:
+      always: true
+
+verifier:
+  name: ansible
