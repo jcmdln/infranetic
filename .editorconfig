@@ -11,18 +11,14 @@ insert_final_newline = true
 tab_width = 4
 trim_trailing_whitespace = true
 
-[*.hcl{,.j2}]
-indent_size = 2
-tab_width = 2
-
-[*.json{,c}{,.j2}]
-indent_size = 2
-tab_width = 2
-
-[*.y{,a}ml{,.j2}]
+[*.{hcl,json,y{,a}ml}{,.j2}]
 indent_size = 2
 tab_width = 2
 
 [*.{yaml,ansible-}lint]
+indent_size = 2
+tab_width = 2
+
+[Vagrantfile]
 indent_size = 2
 tab_width = 2
