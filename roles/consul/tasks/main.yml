@@ -31,11 +31,11 @@
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
-    recurse: true
     owner: consul
     group: consul
     mode: 0750
   loop:
+    - path: /etc/consul
     - path: /etc/consul.d
     - path: /etc/consul/data
     - path: /etc/consul/plugins
