@@ -11,6 +11,7 @@
 !ansible.cfg
 !LICENSE.md
 !README.md
+!requirements.txt
 !requirements.yml
 !sample.inventory.yml
 !setup-vagrant.yml
