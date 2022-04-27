@@ -14,7 +14,7 @@ vault_listener_tls_cert_file: null # /etc/vault/tls/tls.crt
 vault_listener_tls_key_file: null # /etc/vault/tls/tls.key
 vault_listener_tls_min_version: tls12
 
-vault_storage_address: 127.0.0.1:8500/
+vault_storage_address: 127.0.0.1:8500
 vault_storage_path: vault
 
 vault_telemetry_disable_hostname: true
