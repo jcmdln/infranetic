@@ -1,4 +1,4 @@
 # SPDX-License-Identifier: ISC
 
-molecule==3.6.1
+molecule[podman]==3.6.1
 -r ./ansible.txt

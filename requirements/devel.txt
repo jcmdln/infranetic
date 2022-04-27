@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: ISC
+
+-r ./ansible-lint.txt
+-r ./ansible.txt
+-r ./molecule.txt
+-r ./tox.txt
+-r ./yamllint.txt
