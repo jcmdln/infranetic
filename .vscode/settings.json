@@ -1,7 +1,8 @@
 {
   "editor.wordWrapColumn": 99,
   "files.associations": {
-    "${workspaceFolder}/.ansible-lint": "yaml"
+    "${workspaceFolder}/.ansible-lint": "yaml",
+    "${workspaceFolder}/requirements/*.txt": "pip-requirements"
   },
   "files.exclude": {
     ".cache": true,
