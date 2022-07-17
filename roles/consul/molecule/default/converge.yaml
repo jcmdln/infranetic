@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: ISC
+---
+- name: Converge
+  hosts: all
+  become: true
+  roles:
+    - role: consul

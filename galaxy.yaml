@@ -1,0 +1,19 @@
+---
+namespace: jcmdln
+name: infranetic
+version: 0.0.0
+repository: https://github.com/jcmdln/infranetic
+license_file: LICENSE.md
+readme: README.md
+authors:
+  - "Johnathan C. Maudlin <jcmdln@gmail.com>"
+dependencies:
+  "ansible.posix": "*"
+  "ansible.utils": "*"
+  "community.crypto": "*"
+  "community.general": "*"
+tags:
+  - collection
+  - consul
+  - nomad
+  - vault

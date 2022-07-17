@@ -9,7 +9,7 @@
   tasks:
     - name: Add Ansible dependencies
       ansible.builtin.package:
-        name: "{{ 'python3-dnf' if ansible_os_family == 'RedHat' else 'python3-apt' }}"
+        name: "{{ 'python3-dnf' if ansible_os_family | lower == 'redhat' else 'python3-apt' }}"
         state: present
       become: true
 
@@ -18,7 +18,7 @@
         url: https://apt.releases.hashicorp.com/gpg
         state: present
       become: true
-      when: ansible_os_family|lower == "debian"
+      when: ansible_os_family | lower == "debian"
 
     - name: (Debian) Add official HashiCorp repository
       ansible.builtin.apt_repository:
@@ -29,7 +29,7 @@
       vars:
         target: "{{ lookup('pipe', 'lsb_release -cs') }}"
       become: true
-      when: ansible_os_family|lower == "debian"
+      when: ansible_os_family | lower == "debian"
 
     - name: (RedHat) Add official HashiCorp repository
       ansible.builtin.yum_repository:
@@ -44,8 +44,8 @@
         state: present
       become: true
       vars:
-        target: "{{ 'fedora' if ansible_distribution|lower == 'fedora' else 'rhel' }}"
-      when: ansible_os_family|lower == "redhat"
+        target: "{{ 'fedora' if ansible_distribution | lower == 'fedora' else 'rhel' }}"
+      when: ansible_os_family | lower == "redhat"
 
     - name: Add required packages
       ansible.builtin.package:
@@ -64,16 +64,14 @@
         pkgs_rpm:
           - libvirt-client
           - libvirt-daemon
-        pkgs_target: >-
-          {{ pkgs_rpm if ansible_os_family|lower == "redhat"
-          else pkgs_deb }}
+        pkgs_target: "{{ pkgs_rpm if ansible_os_family | lower == 'redhat' else pkgs_deb }}"
 
     - name: (RedHat) Remove conflicting cracklib-packer symlink
       ansible.builtin.file:
         path: /usr/sbin/packer
         state: absent
       become: true
-      when: ansible_os_family == "RedHat"
+      when: ansible_os_family | lower == "redhat"
 
     - name: Add current user to libvirt group
       ansible.builtin.user:

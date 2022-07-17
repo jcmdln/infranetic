@@ -1,12 +1,12 @@
 {
   "recommendations": [
-    "4ops.packer",
     "editorconfig.editorconfig",
-    "hashicorp.terraform",
+    "esbenp.prettier-vscode",
+    "hashicorp.hcl",
     "redhat.ansible",
     "redhat.vscode-yaml",
     "samuelcolvin.jinjahtml",
     "tamasfe.even-better-toml",
-    "wayou.vscode-todo-highlight",
+    "wayou.vscode-todo-highlight"
   ]
 }

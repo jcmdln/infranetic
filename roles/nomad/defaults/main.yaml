@@ -1,0 +1,28 @@
+# SPDX-License-Identifier: ISC
+---
+nomad_bind_addr: 127.0.0.1
+nomad_data_dir: /etc/nomad/data
+nomad_log_level: INFO
+nomad_plugin_dir: /etc/nomad/plugins
+
+nomad_advertise_http: 127.0.0.1
+nomad_advertise_rpc: 127.0.0.1
+nomad_advertise_serf: 127.0.0.1
+
+nomad_client_enabled: true
+nomad_client_servers:
+  - 127.0.0.1
+
+nomad_consul_address: "{{ consul_bind_addr | default(127.0.0.1) }}"
+
+nomad_server_enabled: true
+nomad_server_bootstrap_expect: "{{ play_hosts | length | int }}"
+
+nomad_vault_enabled: true
+nomad_vault_address: "https://{{ vault_listener_address | default(127.0.0.1) }}"
+nomad_vault_ca_path: /etc/certs/ca
+nomad_vault_cert_file: /var/certs/vault.crt
+nomad_vault_create_from_role: nomad-cluster
+nomad_vault_key_file: /var/certs/vault.key
+nomad_vault_tls_skip_verify: true
+nomad_vault_token: ""

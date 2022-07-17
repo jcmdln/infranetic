@@ -4,7 +4,7 @@
   ansible.builtin.user:
     name: consul
     state: present
-    home: "/etc/consul.d"
+    home: /etc/consul.d
     shell: /bin/false
     system: true
 
@@ -56,23 +56,6 @@
       dest: /etc/consul.d/consul.hcl
   loop_control:
     label: "{{ item.dest }}"
-
-- name: Add hashicorp-consul-stable repository
-  ansible.builtin.yum_repository:
-    name: consul
-    state: present
-    enabled: true
-    baseurl: https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
-    description: hashicorp-consul-stable
-    file: hashicorp-consul-stable
-    gpgcheck: true
-    gpgkey: https://rpm.releases.hashicorp.com/gpg
-    include: consul
-
-- name: Add packages
-  ansible.builtin.package:
-    name: "{{ consul_packages }}"
-    state: present
 
 - name: Configure consul.service
   ansible.builtin.template:

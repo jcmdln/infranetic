@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: ISC
+---
+- name: Ensure required packages are installed
+  ansible.builtin.package:
+    name: "{{ common | union(targets[ansible_os_family | lower]) }}"
+    state: present
+    update_cache: "{{ true if ansible_os_family | lower == 'debian' else omit }}"
+  vars:
+    common:
+      - ca-certificates
+      - firewalld
+      - gnupg
+      - systemd
+    targets:
+      debian: []
+      redhat:
+        - systemd-resolved
+
+- name: Add package repositories
+  ansible.builtin.include_tasks: "repository/{{ ansible_os_family | lower }}.yaml"
+
+- name: Ensure firewalld service is enabled and started
+  ansible.builtin.systemd:
+    name: firewalld
+    enabled: true
+    state: started

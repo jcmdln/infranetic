@@ -1,0 +1,27 @@
+# SPDX-License-Identifier: ISC
+---
+- name: (RedHat) Add docker-ce-stable repository
+  ansible.builtin.yum_repository:
+    name: docker-ce-stable
+    description: docker-ce-stable
+    state: present
+    enabled: true
+    file: docker-ce-stable
+    baseurl: "https://download.docker.com/linux/{{ dist }}/$releasever/$basearch/stable"
+    gpgcheck: true
+    gpgkey: https://download.docker.com/linux/{{ dist }}/gpg
+  vars:
+    dist: "{{ ansible_distribution | lower }}"
+
+- name: (RedHat) Add hashicorp-stable repository
+  ansible.builtin.yum_repository:
+    name: hashicorp-stable
+    description: hashicorp-stable
+    state: present
+    enabled: true
+    file: hashicorp-stable
+    baseurl: "https://rpm.releases.hashicorp.com/{{ dist }}/$releasever/$basearch/stable"
+    gpgcheck: true
+    gpgkey: https://rpm.releases.hashicorp.com/gpg
+  vars:
+    dist: "{{ 'fedora' if ansible_distribution | lower == 'fedora' else 'RHEL' }}"

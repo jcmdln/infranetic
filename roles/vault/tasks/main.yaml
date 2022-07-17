@@ -50,18 +50,6 @@
   loop_control:
     label: "{{ item.dest }}"
 
-- name: Add hashicorp-vault-stable repository
-  ansible.builtin.yum_repository:
-    name: vault
-    state: present
-    enabled: true
-    baseurl: https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
-    description: hashicorp-vault-stable
-    file: hashicorp-vault-stable
-    gpgcheck: true
-    gpgkey: https://rpm.releases.hashicorp.com/gpg
-    include: vault
-
 - name: Add packages
   ansible.builtin.package:
     name: "{{ vault_packages }}"

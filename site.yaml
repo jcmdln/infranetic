@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: ISC
+---
+- name: Check
+  hosts: all
+  tags: [always, check]
+  tasks:
+    - name: Ensure we meet operating system version requirements
+      ansible.builtin.fail:
+        msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported."
+      vars:
+        dist: "{{ ansible_distribution | lower }}"
+        dist_rel: "{{ ansible_distribution_release | lower }}"
+        dist_ver: "{{ ansible_distribution_version | lower }}"
+        targets:
+          debian: ["10", "11"]
+          centos: [8s, 9s]
+          fedora: ["35", "36"]
+          ubuntu: ["20.04", "22.04"]
+        supported: "{{ targets[dist] }}"
+      changed_when: false
+      failed_when: >-
+        dist not in targets.keys() or
+        (dist == "centos" and dist_rel != "stream" and dist_ver~"s" not in supported) or
+        (dist != "centos" and dist_rel not in supported and dist_ver not in supported)
+
+- name: Deploy
+  hosts: all
+  become: true
+  tags: [deploy]
+  roles:
+    - role: setup
+      tags: [setup]
+
+    - role: consul
+      tags: [consul]
+
+    - role: vault
+      tags: [vault]
+
+    - role: nomad
+      tags: [nomad]

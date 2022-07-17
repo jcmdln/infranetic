@@ -4,4 +4,3 @@
 -r ./ansible.txt
 -r ./molecule.txt
 -r ./tox.txt
--r ./yamllint.txt

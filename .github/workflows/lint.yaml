@@ -2,32 +2,7 @@
 ---
 name: lint
 
-on:
-  pull_request:
-    paths:
-      - .github/workflows/lint.yml
-      - requirements/*.txt
-      - roles/**
-      - .ansible-lint
-      - .editorconfig
-      - .gitignore
-      - .yamllint
-      - ansible.cfg
-      - site.yml
-      - tox.ini
-  push:
-    paths:
-      - .github/workflows/lint.yml
-      - requirements/*.txt
-      - roles/**
-      - .ansible-lint
-      - .editorconfig
-      - .gitignore
-      - .yamllint
-      - ansible.cfg
-      - site.yml
-      - tox.ini
-  workflow_dispatch:
+on: [pull_request, push, workflow_dispatch]
 
 jobs:
   lint:

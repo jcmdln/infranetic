@@ -20,6 +20,6 @@ vault_storage_path: vault
 vault_telemetry_disable_hostname: true
 vault_telemetry_statsite_address: null # 127.0.0.1:8125
 
-vault_vault_client_address: "{{ vault_listener_address }}"
-vault_vault_client_cert: null # /etc/vault/tls/tls.crt
-vault_vault_client_key: null # /etc/vault/tls/tls.key
+vault_client_address: "{{ vault_listener_address }}"
+vault_client_cert: null # /etc/vault/tls/tls.crt
+vault_client_key: null # /etc/vault/tls/tls.key

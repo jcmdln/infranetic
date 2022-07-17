@@ -12,7 +12,7 @@ ConditionFileNotEmpty=/etc/consul.d/consul.hcl
 EnvironmentFile=/etc/consul.d/consul.env
 User=consul
 Group=consul
-ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d --data-dir=/etc/consul/data
+ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d --data-dir={{ consul_data_dir }}
 ExecReload=/bin/kill --signal HUP $MAINPID
 KillMode=process
 KillSignal=SIGTERM

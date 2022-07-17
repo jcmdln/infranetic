@@ -1,0 +1,40 @@
+# SPDX-License-Identifier: ISC
+---
+all:
+  vars:
+    ansible_ssh_extra_args: -o StrictHostKeyChecking=no
+    ansible_ssh_pass: vagrant
+    ansible_ssh_private_key_file: ".vagrant/machines/{{ inventory_hostname }}/libvirt/private_key"
+    ansible_user: vagrant
+
+hyperconverged:
+  hosts:
+    centos:
+    debian:
+    ubuntu:
+
+consul-clients:
+  children:
+    nomad-clients:
+    nomad-servers:
+    vault-servers:
+
+consul-servers:
+  children:
+    hyperconverged:
+
+nomad-clients:
+  children:
+    hyperconverged:
+
+nomad-servers:
+  children:
+    hyperconverged:
+
+vault-clients:
+  children:
+    hyperconverged:
+
+vault-servers:
+  children:
+    hyperconverged:

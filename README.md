@@ -1,6 +1,4 @@
-`Infranetic` is a brutalized portmanteau derived from the idea of "non-frenetic infrastructure"
-that aims to simplify provider-agnostic deployments that can be reproduced locally and deployed
-globally. This idea was inspired in part by the following:
+`Infranetic` is a brutalized portmanteau derived from the idea of "non-frenetic infrastructure" that aims to simplify provider-agnostic deployments that can be reproduced locally and deployed globally. This idea was inspired in part by the following:
 
 -   [Ansible and HashiCorp: Better Together (hashicorp.com)](https://www.hashicorp.com/resources/ansible-terraform-better-together)
 -   [Containers at Facebook by Lindsay Salisbury (youtube.com)](https://www.youtube.com/watch?v=_Qc9jBk18w8)
@@ -17,13 +15,13 @@ $ virtualenv .venv
 $ source .venv/bin/activate
 
 # Install Python dependencies
-(.venv) $ pip install -r requirements/ansible.txt
+(.venv) $ pip install -r requirements.txt
 
 # Install Ansible dependencies
-(.venv) $ ansible-galaxy install -r requirements.yml
+(.venv) $ ansible-galaxy install -r requirements.yaml
 
 # Setup localhost to run Vagrant
-(.venv) $ ansible-playbook --ask-become-pass setup-vagrant.yml
+(.venv) $ ansible-playbook --ask-become-pass setup-vagrant.yaml
 (.venv) $ newgrp libvirt
 ```
 
@@ -39,9 +37,9 @@ $ source .venv/bin/activate
 ```sh
 # multi-node (Default)
 (.venv) $ vagrant up
-(.venv) $ ansible-playbook -i sample.inventory.yml site.yml
+(.venv) $ ansible-playbook -i sample.inventory.yaml site.yaml
 
 # single-node
 (.venv) $ vagrant up mgmt1
-(.venv) $ ansible-playbook -i sample.inventory.yml -l mgmt1.infranetic site.yml
+(.venv) $ ansible-playbook -i sample.inventory.yaml -l mgmt1.infranetic site.yaml
 ```

@@ -34,9 +34,9 @@ telemetry {
 {% endif -%}
 
 vault {
-  address = "{{ vault_vault_client_address }}"
-{% if vault_vault_client_cert and vault_vault_client_key %}
-  client_cert = "{{ vault_vault_client_cert }}"
-  client_key = "{{ vault_vault_client_key }}"
+  address = "{{ vault_client_address }}"
+{% if vault_client_cert and vault_client_key %}
+  client_cert = "{{ vault_client_cert }}"
+  client_key = "{{ vault_client_key }}"
 {% endif -%}
 }

@@ -7,26 +7,31 @@
 !.ansible-lint
 !.editorconfig
 !.gitignore
+!.prettierrc.yaml
 !.yamllint
 !ansible.cfg
+!galaxy.yaml
 !LICENSE.md
 !README.md
 !requirements.txt
-!requirements.yml
-!sample.inventory.yml
-!setup-vagrant.yml
-!site.yml
+!requirements.yaml
+!site.yaml
 !tox.ini
 !Vagrantfile
 
 # Include specific files from subdirectories
 !.github/
 !.github/workflows/
-!.github/workflows/*.yml
+!.github/workflows/*.yaml
 
 !.vscode/
 !.vscode/extensions.json
 !.vscode/settings.json
+
+!inventory/
+!inventory/**/
+!inventory/**/*.md
+!inventory/**/*.yaml
 
 !requirements/
 !requirements/**/
@@ -36,4 +41,9 @@
 !roles/**/
 !roles/**/*.j2
 !roles/**/*.md
-!roles/**/*.yml
+!roles/**/*.yaml
+
+!tools/
+!tools/**/
+!tools/**/*.md
+!tools/**/*.yaml

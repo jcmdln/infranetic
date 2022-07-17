@@ -1,3 +1,0 @@
-# SPDX-License-Identifier: ISC
-
-yamllint==1.26.3

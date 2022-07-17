@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: ISC
 
-ENV["VAGRANT_DEFAULT_PROVIDER"] = "libvirt"
 ENV["VAGRANT_NO_PARALLEL"] = "yes"
 
 Vagrant.configure("2") do |config|
@@ -13,15 +12,28 @@ Vagrant.configure("2") do |config|
   config.nfs.verify_installed = false
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
-  config.vm.box = "jcmdln/fedora"
-  config.vm.box_version = "35"
   config.vm.provider "libvirt" do |v|
     v.cpus = 2
-    v.loader = "/usr/share/OVMF/OVMF_CODE.fd"
-    v.memory = 2048
+    v.memory = 4096
   end
 
-  (1..3).each do |i|
-    config.vm.define "mgmt#{i}"
+  config.vm.provider "virtualbox" do |v|
+    v.cpus = 2
+    v.memory = 4096
+  end
+
+  config.vm.define "centos" do |c|
+    c.vm.box = "generic/centos9s"
+    c.vm.box_version = "4.1.0"
+  end
+
+  config.vm.define "debian" do |c|
+    c.vm.box = "generic/debian11"
+    c.vm.box_version = "4.1.0"
+  end
+
+  config.vm.define "ubuntu" do |c|
+    c.vm.box = "generic/ubuntu2204"
+    c.vm.box_version = "4.1.0"
   end
 end
