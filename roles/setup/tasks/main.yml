@@ -17,7 +17,7 @@
         - systemd-resolved
 
 - name: Add package repositories
-  ansible.builtin.include_tasks: "repository/{{ ansible_os_family | lower }}.yaml"
+  ansible.builtin.include_tasks: "repository/{{ ansible_os_family | lower }}.yml"
 
 - name: Ensure firewalld service is enabled and started
   ansible.builtin.systemd:

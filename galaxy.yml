@@ -1,6 +1,7 @@
 ---
 namespace: jcmdln
 name: infranetic
+description: ""
 version: 0.0.0
 repository: https://github.com/jcmdln/infranetic
 license_file: LICENSE.md

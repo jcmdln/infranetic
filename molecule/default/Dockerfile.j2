@@ -14,8 +14,16 @@ ENV {{ var }} {{ value }}
 {% endfor %}
 {% endif %}
 
-RUN dnf -y install ca-certificates python3 sudo systemd && \
+RUN \
+if [ -n "$(command -v dnf)" ]; then \
+    dnf -y install ca-certificates python3 sudo systemd && \
     dnf -y autoremove && \
-    dnf clean all
+    dnf clean all; \
+elif [ -n "$(command -v apt)" ]; then \
+    apt update && \
+    apt -y install ca-certificates python3 sudo systemd && \
+    apt autoremove && \
+    apt auto clean; \
+fi
 
 CMD ["/bin/bash"]

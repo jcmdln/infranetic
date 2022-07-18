@@ -76,9 +76,11 @@
       - unzip
     targets:
       debian:
-        - libvirt0
+        - libvirt-clients
+        - libvirt-daemon-system
       redhat:
-        - libvirt
+        - libvirt-client
+        - libvirt-daemon
 
 - name: Start and enable docker.service
   ansible.builtin.systemd:

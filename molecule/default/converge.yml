@@ -4,4 +4,7 @@
   hosts: all
   become: true
   roles:
+    - role: setup
+    - role: consul
+    - role: vault
     - role: nomad

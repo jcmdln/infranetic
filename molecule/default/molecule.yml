@@ -2,6 +2,8 @@
 ---
 dependency:
   name: galaxy
+  options:
+    requirements-file: ../../requirements.yml
 
 driver:
   name: podman
@@ -21,8 +23,13 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      callback_enabled: timer
-      stdout_callback: community.general.yaml
+      any_errors_fatal: true
+      bin_ansible_callbacks: true
+      callback_whitelist: profile_roles,timer
+      command_warnings: false
+      deprecation_warnings: false
+      gathering: smart
+      stdout_callback: community.general.yml
     diff:
       always: true
 

@@ -4,8 +4,6 @@ options:
   editorconfig: true
 
 overrides:
-  # Markdown
   - files: "*.md"
     options:
-      # Set 'tabWidth' to 1 to remove double-spacing in bulleted lists
       tabWidth: 1

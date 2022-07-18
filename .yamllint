@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: ISC
 ---
 yaml-files:
-  - "*.yaml"
-  - "*.yaml"
+  - "*.yml"
+  - "*.yml"
   - ".ansible-lint"
-  - ".yamllint"
+  - ".ymllint"
 
 ignore: |
   .mypy_cache/
