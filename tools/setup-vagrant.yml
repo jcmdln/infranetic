@@ -14,6 +14,7 @@
           ansible.builtin.package:
             name: "{{ 'python3-dnf' if ansible_os_family | lower == 'redhat' else 'python3-apt' }}"
             state: present
+          diff_mode: false
 
         - name: (Debian) Add official HashiCorp GPG key
           ansible.builtin.apt_key:
@@ -64,6 +65,7 @@
               redhat:
                 - libvirt-client
                 - libvirt-daemon
+          diff_mode: false
 
         - name: (RedHat) Remove conflicting cracklib-packer symlink
           ansible.builtin.file:

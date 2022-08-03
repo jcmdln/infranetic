@@ -1,10 +1,12 @@
 # {{ template_destpath }}
 # {{ ansible_managed }}
 
+ui = {{ vault_ui|lower}}
+
+log_level = "{{ vault_log_level }}"
+
 api_addr = "{{ vault_api_addr }}"
 cluster_addr = "{{ vault_cluster_address }}"
-log_level = "{{ vault_log_level }}"
-ui = {{ vault_ui|lower}}
 
 cache {
   use_auto_auth_token = false

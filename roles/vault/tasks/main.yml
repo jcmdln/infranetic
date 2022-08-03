@@ -1,5 +1,13 @@
 # SPDX-License-Identifier: ISC
 ---
+- name: Add packages
+  ansible.builtin.package:
+    name:
+      - python3-cryptography
+      - vault
+    state: present
+  diff_mode: false
+
 - name: Add system user 'vault'
   ansible.builtin.user:
     name: vault
@@ -49,11 +57,6 @@
       dest: /etc/vault.d/vault.hcl
   loop_control:
     label: "{{ item.dest }}"
-
-- name: Add packages
-  ansible.builtin.package:
-    name: "{{ vault_packages }}"
-    state: present
 
 - name: Start and enable vault.service
   ansible.builtin.systemd:

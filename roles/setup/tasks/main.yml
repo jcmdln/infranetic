@@ -12,9 +12,12 @@
       - gnupg
       - systemd
     targets:
-      debian: []
+      debian:
+        - python3-apt
       redhat:
+        - python3-dnf
         - systemd-resolved
+  diff_mode: false
 
 - name: Add package repositories
   ansible.builtin.include_tasks: "repository/{{ ansible_os_family | lower }}.yml"

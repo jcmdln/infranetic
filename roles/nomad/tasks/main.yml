@@ -1,5 +1,29 @@
 # SPDX-License-Identifier: ISC
 ---
+- name: Add packages
+  ansible.builtin.package:
+    name: "{{ common | union(targets[ansible_os_family | lower]) }}"
+    state: present
+    update_cache: "{{ true if ansible_os_family | lower == 'debian' else omit }}"
+  vars:
+    common:
+      - containerd.io
+      - docker-ce
+      - docker-ce-cli
+      - docker-compose-plugin
+      - nomad
+      - nomad-autoscaler
+      - qemu-kvm
+      - unzip
+    targets:
+      debian:
+        - libvirt-clients
+        - libvirt-daemon-system
+      redhat:
+        - libvirt-client
+        - libvirt-daemon
+  diff_mode: false
+
 - name: Ensure libvirt group exists
   ansible.builtin.user:
     name: libvirt
@@ -58,29 +82,6 @@
       dest: /etc/nomad.d/nomad.hcl
   loop_control:
     label: "{{ item.dest }}"
-
-- name: Add packages
-  ansible.builtin.package:
-    name: "{{ common | union(targets[ansible_os_family | lower]) }}"
-    state: present
-    update_cache: "{{ true if ansible_os_family | lower == 'debian' else omit }}"
-  vars:
-    common:
-      - containerd.io
-      - docker-ce
-      - docker-ce-cli
-      - docker-compose-plugin
-      - nomad
-      - nomad-autoscaler
-      - qemu-kvm
-      - unzip
-    targets:
-      debian:
-        - libvirt-clients
-        - libvirt-daemon-system
-      redhat:
-        - libvirt-client
-        - libvirt-daemon
 
 - name: Start and enable docker.service
   ansible.builtin.systemd:

@@ -1,12 +1,10 @@
 # SPDX-License-Identifier: ISC
 ---
-- name: Add system user 'consul'
-  ansible.builtin.user:
+- name: Add packages
+  ansible.builtin.package:
     name: consul
     state: present
-    home: /etc/consul.d
-    shell: /bin/false
-    system: true
+  diff_mode: false
 
 - name: Open required ports
   ansible.posix.firewalld:
@@ -51,9 +49,9 @@
     mode: 0640
   loop:
     - src: consul.env.j2
-      dest: /etc/consul.d/consul.env
+      dest: /etc/consul/consul.env
     - src: consul.hcl.j2
-      dest: /etc/consul.d/consul.hcl
+      dest: /etc/consul/consul.hcl
   loop_control:
     label: "{{ item.dest }}"
 

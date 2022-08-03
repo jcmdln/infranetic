@@ -2,18 +2,18 @@
 # {{ ansible_managed }}
 
 [Unit]
-Description=Nomad
-Documentation=https://www.nomadproject.io/docs/
+Description=Vault
+Documentation=https://www.vaultproject.io/docs/
 Requires=network-online.target
 After=network-online.target
-ConditionFileNotEmpty=/etc/nomad/nomad.hcl
+ConditionFileNotEmpty=/etc/vault/vault.hcl
 
 [Service]
-User=nomad
-Group=nomad
+User=vault
+Group=vault
 
 ExecReload=/bin/kill -HUP $MAINPID
-ExecStart=/usr/local/bin/nomad agent -config=/etc/nomad -data-dir=/var/lib/nomad -plugin-dir=/opt/nomad
+ExecStart=/usr/local/bin/vault agent -config=/etc/vault -data-dir=/var/lib/vault -plugin-dir=/opt/vault
 KillMode=process
 KillSignal=SIGINT
 LimitNOFILE=65536

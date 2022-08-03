@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: ISC
 ---
-consul_packages:
-  - consul
+consul_datacenter: "us-east-1"
 
 consul_advertise_addr: "127.0.0.1"
 consul_bind_addr: "127.0.0.1"
 consul_bootstrap_expect: "{{ play_hosts | length | int }}"
 consul_client_addr: "127.0.0.1"
-consul_data_dir: /etc/consul/data
+consul_connect_enabled: true
+consul_data_dir: "/var/lib/consul/data"
+consul_log_level: "DEBUG"
 consul_server: true
-
 consul_ui_config_enabled: true

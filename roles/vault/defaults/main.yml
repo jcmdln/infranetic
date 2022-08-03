@@ -1,9 +1,5 @@
 # SPDX-License-Identifier: ISC
 ---
-vault_packages:
-  - python3-cryptography
-  - vault
-
 vault_api_addr: "http://{{ vault_listener_address }}"
 vault_cluster_address: "http://127.0.0.1:8201"
 vault_log_level: INFO
@@ -18,7 +14,7 @@ vault_storage_address: "127.0.0.1:8500"
 vault_storage_path: vault
 
 vault_telemetry_disable_hostname: true
-vault_telemetry_statsite_address: null # "127.0.0.1:8125"
+vault_telemetry_statsite_address: "127.0.0.1:8125"
 
 vault_client_address: "{{ vault_listener_address }}"
 vault_client_cert: null # /etc/vault/tls/tls.crt

@@ -8,16 +8,12 @@ nomad_plugin_dir: /etc/nomad/plugins
 nomad_advertise_http: "127.0.0.1"
 nomad_advertise_rpc: "127.0.0.1"
 nomad_advertise_serf: "127.0.0.1"
-
 nomad_client_enabled: true
 nomad_client_servers:
   - "127.0.0.1"
-
 nomad_consul_address: "{{ consul_bind_addr if consul_bind_addr is defined else '127.0.0.1' }}"
-
 nomad_server_enabled: true
 nomad_server_bootstrap_expect: "{{ play_hosts | length | int }}"
-
 nomad_vault_enabled: true
 nomad_vault_address: >-
   {{ vault_api_addr if vault_api_addr is defined else 'http://127.0.0.1:8200' }}
