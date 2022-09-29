@@ -24,16 +24,16 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "centos" do |c|
     c.vm.box = "generic/centos9s"
-    c.vm.box_version = "4.1.0"
+    c.vm.box_version = "4.1.14"
   end
 
   config.vm.define "debian" do |c|
     c.vm.box = "generic/debian11"
-    c.vm.box_version = "4.1.0"
+    c.vm.box_version = "4.1.14"
   end
 
   config.vm.define "ubuntu" do |c|
     c.vm.box = "generic/ubuntu2204"
-    c.vm.box_version = "4.1.0"
+    c.vm.box_version = "4.1.14"
   end
 end
