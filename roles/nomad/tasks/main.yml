@@ -22,7 +22,6 @@
       redhat:
         - libvirt-client
         - libvirt-daemon
-  diff_mode: false
 
 - name: Ensure libvirt group exists
   ansible.builtin.user:

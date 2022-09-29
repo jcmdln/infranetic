@@ -6,7 +6,6 @@
       - python3-cryptography
       - vault
     state: present
-  diff_mode: false
 
 - name: Add system user 'vault'
   ansible.builtin.user:

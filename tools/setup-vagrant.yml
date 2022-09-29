@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: ISC
 ---
-- hosts: localhost
+- name: Setup Vagrant
+  hosts: localhost
 
   vars:
     ansible_connection: local
@@ -12,9 +13,14 @@
       block:
         - name: Add Ansible dependencies
           ansible.builtin.package:
-            name: "{{ 'python3-dnf' if ansible_os_family | lower == 'redhat' else 'python3-apt' }}"
+            name: "{{ targets[ansible_os_family | lower] }}"
             state: present
-          diff_mode: false
+          vars:
+            targets:
+              debian:
+                - python3-apt
+              redhat:
+                - python3-dnf
 
         - name: (Debian) Add official HashiCorp GPG key
           ansible.builtin.apt_key:
@@ -65,7 +71,6 @@
               redhat:
                 - libvirt-client
                 - libvirt-daemon
-          diff_mode: false
 
         - name: (RedHat) Remove conflicting cracklib-packer symlink
           ansible.builtin.file:

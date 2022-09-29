@@ -4,7 +4,6 @@
   ansible.builtin.package:
     name: consul
     state: present
-  diff_mode: false
 
 - name: Open required ports
   ansible.posix.firewalld:

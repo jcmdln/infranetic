@@ -5,14 +5,19 @@
   "editor.wordWrap": "bounded",
   "editor.wordWrapColumn": 100,
   "files.associations": {
-    "${workspaceFolder}/.ansible-lint": "yaml",
-    "${workspaceFolder}/requirements/*.txt": "pip-requirements"
+    ".ansible-lint": "yaml",
+    "requirements/*.txt": "pip-requirements",
+    "site-*.yml": "ansible",
+    "**/roles/**/defaults/**/*.yml": "ansible",
+    "**/roles/**/handlers/**/*.yml": "ansible",
+    "**/roles/**/tasks/**/*.yml": "ansible",
+    "**/roles/**/vars/**/*.yml": "ansible"
   },
   "files.exclude": {
-    ".cache": true,
-    ".config": true,
-    ".local": true,
-    ".vagrant.d": true,
+    "**/.cache/**": true,
+    "**/.config/**": true,
+    "**/.local/**": true,
+    "**/.vagrant.d/**": true,
     "build": true
   },
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
@@ -32,7 +37,7 @@
     ]
   },
   "[ansible]": {
-    "editor.defaultFormatter": "redhat.ansible"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
